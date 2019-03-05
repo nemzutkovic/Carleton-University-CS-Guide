@@ -13,3 +13,7 @@ Each course README will outline its' own prerequisites.
 ## Compiling & Running
 
 Each course will also outline it's own compiling and running procedures.
+
+## Other
+
+If there is anything you think I should add or change, feel free to email me at nem@zutkovic.com!
