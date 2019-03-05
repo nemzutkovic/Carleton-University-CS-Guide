@@ -1,7 +1,6 @@
 # Carleton CS Guide
 
-Contains all my work done during my computer science undergrad (2017-2019). Each directory is represented as the course code in the form of COMP XXXX.
-Each directory will have it's own README file that will outline the professor, term course was taken, programming language(s) used and any other instructions.
+Contains all my work done during my computer science undergrad program (2017-2019). Each directory is represented as the course code in the form of COMP XXXX. Each directory will have it's own README file that will outline the professor, term course was taken, programming language(s) used and any other information or instructions. Each course directory has subdirectories that contain assignments, tutorials and any other useful material. Each of these subdirectories also has the (grade) received for that assignment or tutorial.
 
 ## Purpose
 
