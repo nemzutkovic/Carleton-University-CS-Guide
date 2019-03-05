@@ -12,5 +12,5 @@ A first course in programming for B.C.S. students emphasizing problem solving an
 * [Python 3.7.2](https://www.python.org/downloads/)
 
 ## Compiling & Running
-* Windows: python <py-file>
-* Mac: python3 <py-file>
+* Windows: `python <py-file>`
+* Mac: `python3 <py-file>`
