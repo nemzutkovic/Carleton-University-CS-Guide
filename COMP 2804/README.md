@@ -7,3 +7,6 @@ A second course in discrete mathematics and discrete structures. Topics include:
 * Professor: [Michiel Smid](https://carleton.ca/scs/people/michiel-smid/)
 * Term Taken: Fall 2017
 * Programming Language: None
+
+## Missing
+* Assignment 4
