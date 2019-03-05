@@ -4,7 +4,7 @@ Contains all my work done during my computer science undergrad program (2017-202
 
 ## Purpose
 
-To help current and future students get inspiration for their assignments and tutorials. Copying is forbidden, but feel free to reference any work in this repo.
+To help current and future students get inspiration for their assignments and tutorials. Copying is forbidden, but feel free to reference any work.
 
 ## Prerequisites
 
