@@ -8,5 +8,5 @@ A second course in discrete mathematics and discrete structures. Topics include:
 * Term Taken: Fall 2017
 * Programming Language: None
 
-## Missing
-* Assignment 4
+## Files Missing
+* Assignment 4 (Solutions)
