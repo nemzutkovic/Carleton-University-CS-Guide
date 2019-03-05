@@ -1,0 +1,245 @@
+//https://stackoverflow.com/questions/8921987/how-to-get-all-text-files-from-one-folder-using-java
+// https://www.youtube.com/watch?v=706Ye4ubtEY
+//https://stackoverflow.com/questions/15867148/why-do-we-need-to-extend-jframe-in-a-swing-application
+//https://gamedev.stackexchange.com/questions/37623/how-can-i-move-a-sprite-in-the-direction-it-is-facing
+//https://codereview.stackexchange.com/questions/102005/basic-game-with-moving-objects-in-swing
+//https://stackoverflow.com/questions/27706197/how-can-i-center-graphics-drawstring-in-java
+
+/*
+     Devon Robitaille
+     101031827
+*/
+
+import java.io.*; //library for reading and writing files
+import java.util.*; //library to use ArrayLists
+import javax.swing.*; //graphical library
+import java.awt.*; //other stuff
+import java.awt.event.*; //event handling
+
+public class World extends JFrame implements ActionListener {
+  
+  // Arraylist that hold information - room = rooms, worldFiles = load world from a file into, allComponents = is for the menu bar on top
+  public static ArrayList<Room> rooms = new ArrayList<Room>();
+  private static String characterSelected;
+  public static ArrayList<String> worldFiles = new ArrayList<String>();
+  private static ArrayList<JComponent> allComponents = new ArrayList<JComponent>();
+  
+  // size of the window
+  public static int width  = 1000;
+  public static int height = 1000;
+
+  // keep track of which room the player is in
+  public static int currentRoom = 0;
+  
+  //create the panel
+  private static DrawWorld dW = new DrawWorld();
+  
+  //Folder location
+  public static String fileLocation = System.getProperty("user.dir");
+  
+  public static void main(String[] args) {
+    
+    loadAllTextFiles(fileLocation); //inside of quotes is location to the folder with the project
+    new TestMenu();
+    /*   create an instance of the window and continuously update it   */
+    EventQueue.invokeLater(new Runnable() {
+      public void run() {
+        try {
+          World frame = new World();
+          frame.setVisible(true);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
+  }
+
+  // Deals with create the window on layer 0 (base layer)
+  public World() { // error "AWT-EventQueue-0" StackOverflowError
+    //prevents user from resizing the window
+    setResizable(false);
+    //allows us to close the window
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+    //setBounds(100, 100, 450, 300);
+    
+    //adds layer 1 to layer 0, layer 1 = the actual rooms
+    getContentPane().add(dW);
+    //Get character Selection from user
+    System.out.println(characterSelected);
+    // creating my JFrame only when I need it and where I need it
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLocationByPlatform(true);
+    setSize(width, height);
+    setResizable(false);
+    
+    /*   Initiate all of the JMenuBar's items and give them actions   */ 
+    JMenuBar bar = new JMenuBar();
+    JMenu file = new JMenu("File");
+    JMenuItem newMenuItem = new JMenuItem("New");
+    newMenuItem.addActionListener(this);
+    JMenuItem save = new JMenuItem("Save");
+    save.addActionListener(this);
+    JMenuItem close = new JMenuItem("Exit");
+    close.addActionListener(this);
+    
+    /*   To display all files that could be opened   */
+    JMenuItem open = new JMenu("Open");
+    ArrayList<JMenuItem> subOpen = new ArrayList<JMenuItem>();
+    for (int i = 0; i < worldFiles.size(); i++) {
+      subOpen.add(new JMenuItem(worldFiles.get(i)));
+      subOpen.get(i).addActionListener(this);
+      open.add(subOpen.get(i));
+    }
+    
+    /*   To display all the files that can be overwritten under save as  */ 
+    JMenuItem saveAs = new JMenu("Save as...");
+    ArrayList<JMenuItem> subSaveAs = new ArrayList<JMenuItem>();
+    for (int i = 0; i < worldFiles.size(); i++) {
+      subSaveAs.add(new JMenuItem(worldFiles.get(i)));
+      subSaveAs.get(i).addActionListener(this);
+      saveAs.add(subSaveAs.get(i));
+    }
+      subSaveAs.add(new JMenuItem("New"));
+      subSaveAs.get(worldFiles.size()).addActionListener(this);
+      saveAs.add(subSaveAs.get(worldFiles.size()));        
+      file.add(newMenuItem);
+      file.add(open);
+      file.add(save);
+      file.add(saveAs);
+      file.addSeparator();
+      file.add(close);    
+      bar.add(file);    
+      setJMenuBar(bar);
+  }
+  
+  // Looks through the directory for any file ending in .txt and adds it to the list of possible files that can be opened
+  private static void loadAllTextFiles(String d) {
+    File directory = new File(d);
+    for (File file : directory.listFiles()) {
+      if (file.getName().contains("txt")) {
+        worldFiles.add(file.getName());
+      }
+    }    
+  }
+  
+  private static void loadTextFile(String d) {
+    // Set all variables to default
+    setBackToDefault();        
+    // The name of the file to open
+    String fileName = d;    
+    // This will reference one line at a time
+    String line = null;    
+    try {
+      // FileReader reads text files in the default encoding
+      FileReader fileReader = new FileReader(fileName);      
+      // Always wrap FileReader in BufferedReader
+      BufferedReader bufferedReader = new BufferedReader(fileReader);      
+      // Store the number of rooms
+      int numberOfRooms = Integer.valueOf(bufferedReader.readLine());      
+      // Create a string array to save all the information read from the file
+      String[] storedFileName = new String[numberOfRooms + (numberOfRooms*5)];      
+      // Set the first index of string array to hold the number of rooms
+      storedFileName[0] = String.valueOf(numberOfRooms);      
+      for (int i = 1; i < numberOfRooms + (numberOfRooms*5); i++ ) {        
+        storedFileName[i] = bufferedReader.readLine();        
+      }                        
+      for (int i = 0; i < numberOfRooms; i++) { //fill the array with room objects
+        rooms.add(new Room(storedFileName[1+(5*i)], storedFileName[2+(5*i)]));    
+      }
+      
+      //System.out.println("Number of rooms: " + numberOfRooms);
+      //add adjacent rooms to the room
+      for (int i = 0; i < numberOfRooms; i++) {        
+        String[] adjacentRooms = storedFileName[3+(5*i)].split(",");        
+        for (int j = 0; j < adjacentRooms.length; j++) {        
+          rooms.get(i).addRoom(rooms.get(Integer.valueOf(adjacentRooms[j])-1));          
+        }
+     
+       //add players to the room 
+        Random rand1 = new Random();
+        String[] playersInRoom = storedFileName[4+(5*i)].split(",");
+        ////System.out.println("Players in room: " + playersInRoom.length);
+        for (int outer = 0; outer < playersInRoom.length; outer++) { // outer array (3 times because 3 characters)
+          for (int inner = 0; inner < Integer.valueOf(playersInRoom[outer]); inner++) { // inner array (n times for n characters needed to be created)
+            if (outer == 0) {
+              //index out of abounds exception
+              ////System.out.println("outer: "+ outer + "   outerR: " + inner);
+              rooms.get(i).addPlayer(new Human(rand1.nextInt(width), 80, "Jeff"));
+            } else if (outer == 1) {
+              rooms.get(i).addPlayer(new Elf(rand1.nextInt(width), 80, "Paul"));
+            } else {
+              rooms.get(i).addPlayer(new Goblin(rand1.nextInt(width), 80, "Stephano"));
+            }
+          }
+        }
+        /**Add things to the things Array*/
+        String[] thingsInRoom = storedFileName[5+(5*i)].split(",");
+       ////System.out.println("things in the room: " + Arrays.deepToString(thingsInRoom));
+        for (int outer = 0; outer < thingsInRoom.length; outer++) { // outer array (6 times)
+          boolean flag = true;
+          int xPos, yPos;
+          
+          xPos = rand1.nextInt(width);
+          yPos = rand1.nextInt(height);    
+          
+          if (Integer.valueOf(thingsInRoom[outer]) == 1 && outer == 0) {
+            rooms.get(i).addThing(new Tool(xPos, yPos,0, "Soul-Edge", "Sword"));
+          } else if (Integer.valueOf(thingsInRoom[outer]) == 1 && outer == 1){
+            rooms.get(i).addThing(new Tool(xPos, yPos,0, "Shield of Destiny", "Armour"));
+          } else if (Integer.valueOf(thingsInRoom[outer]) == 1 && outer == 2) {
+            rooms.get(i).addThing(new Tool(xPos, yPos,0, "Them ZuBeans", "Potion"));
+          } else if (Integer.valueOf(thingsInRoom[outer]) == 1 && outer == 3) {
+            rooms.get(i).addThing(new Food(xPos, yPos, 0, "Apple", "BadFood"));
+          } else if (Integer.valueOf(thingsInRoom[outer]) == 1 && outer == 4) {
+            rooms.get(i).addThing(new Food(xPos, yPos, 0, "Apple", "GoodFood"));
+          } else if (Integer.valueOf(thingsInRoom[outer]) == 1 && outer == 5) {
+            rooms.get(i).addThing(new Treasure(xPos, yPos,"Flashy"));
+          }else if (Integer.valueOf(thingsInRoom[outer]) == 1 && outer == 6) {
+            rooms.get(i).addThing(new Tool(xPos, yPos,0, "Key", "Key"));
+          }
+        }        
+
+        //error below "AWT-EventQueue-01" java.lang.IndexOutOfBoundsException:Index 4, size 4        
+        //System.out.println(rooms.get(i) + " - Adjacent Room(s) : " + rooms.get(i).getRoom() + " - Players : " + rooms.get(i).getPlayer() + " - Things : " + rooms.get(i).getThing());
+      }// number of rooms - for loop
+      
+      //Always close files.
+      dW.initSetup();
+      bufferedReader.close();
+    }
+    catch (FileNotFoundException ex) {
+      //System.out.println("Unable to open file '" + fileName + "'");
+    }
+    catch (IOException ex) {
+      //System.out.println("Error reading file '" + fileName + "'");
+      // Or we could just do this : ex.printStackTrace();
+    } 
+  }
+  
+  //to clear everything and set it back to default so that we can open a new world
+  private static void setBackToDefault() {
+    rooms.clear();
+  }
+  
+  public void actionPerformed(ActionEvent e){
+    String name = e.getActionCommand();
+    
+    if (name.equalsIgnoreCase("Exit")) {
+      //System.out.println("Closed");
+      System.exit(0);
+    } else if (name.equalsIgnoreCase("New")) {
+      //System.out.println("Unable to perform 'Save As - New' function");
+    } else if (name.equalsIgnoreCase("Save")) {
+      //System.out.println("Unable to perform 'Save' function"); 
+    } else if (name.equalsIgnoreCase("1")) {
+      //System.out.println("Unable to perform 'Save as - 'file'' function");
+    } else {
+      //System.out.println("hello");
+      loadTextFile(name);
+    }
+  }
+  //Set the main character of the game
+  public static void setCharacter(String s){characterSelected = s;}
+  public static String getCharacter(){return characterSelected;}
+}

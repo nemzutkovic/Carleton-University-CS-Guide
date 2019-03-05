@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>COMP2406</title>
+<link href="template.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<p class="header">COMP 2406 - Fall 2017 Tutorial #2</p>
+<p class="header subheader">Javascript Basics -String and Arrays</p>
+<hr/>
+<p>&copy; L.D. Nel 2017</p>
+<hr />
+<p class="red">Revisions will be noted here</p><hr />
+<p class="segment-header">Description:</p>
+<p>The purpose of this tutorial is to get you started working with the most basic features of javascript. The exercises are not meant to be complex from a programming point of view. They are all, in fact, problems that we  used for COMP 1405 tutorials but here you need to figure out how to do them using javascript. The problems basically require knowledge of javascript strings and arrays. Familiarize yourself with the basics of these at, for example, <a href="https://www.w3schools.com/js/default.asp">https://www.w3schools.com/js/default.asp</a></p>
+<p class="red">IMPORTANT: This tutorial is meant to be worked on as homework and for you to demonstrate your results at your tutorial session. You will not be able to complete it if you only start when you come to the tutorial. You will need to learn some basics of javascript on your own and come up with a strategy to solve the problems.</p>
+<p>To get credit for the tutorial you must complete, or make significant progress on, the exercise problems provided and demonstrate your results to the tutorial TA before you leave the tutorial.<br />
+</p>
+<hr/>
+<p class="segment-header">Instructions:<br />
+</p>
+<p class="segment-header"><span class="black-bold">Problem 1)</span></p>
+<p>Download the file in the tutorial  <span class="code">demo_code</span> folder called <span class="code">problem1.js</span> and examine the javascript. It should look like that shown below. </p>
+<pre>
+let landscape = function() {
+  let result = "";
+  let flat = function(size) {
+    for (let count = 0; count < size; count++)
+      result += "_";
+  };
+  let hill = function(size) {
+    result += "/";
+    for (let count = 0; count < size; count++)
+      result += "'";
+    result += "\\";
+  };
+
+  //BUILD SCRIPT
+  flat(3)
+  hill(4);
+  flat(6);
+  hill(1);
+  flat(1);
+  //END SCRIPT
+  return result;
+};
+
+console.log("");
+console.log(landscape());
+
+</pre>
+<p>Run the code with node.js.It will write output to the console window (i.e. you don't need the browser.) It should produce a simple string output meant to look like a &quot;landscape profile&quot; like this: </p>
+<p class="code">___/''''\______/'\_</p>
+<p><br />
+</p>
+<p>For problem 1 modify this code so that it uses the '_' underscore character for both the flat portions and the tops of the hills. That is, so that the following build script portion:</p>
+<p><span class="code">//BUILD SCRIPT<br />
+flat(3)<br />
+hill(5);<br />
+flat(2);<br />
+hill(3);<br />
+flat(4);<br />
+hill(0);<br />
+flat(2);<br />
+//END SCRIPT</span><br />
+</p>
+<p>produces an output that looks like this:</p>
+<pre> <span class="code">
+      _____    ___
+  ___/     \__/   \____/\_
+  </span><br />
+</pre>
+<p>To do this the underscore characters that form the top of the hills must be printed on the previous line of console output. That is, the output represents two lines of text unlike that of the demo code. Also notice that the hill can have a top with no flat portions so the argument passed to the hill() function represents width of the hill excluding its '/' and '\' characters.</p>
+<p>To do this exercise you can use whatever you want from javascript: strings, arrays, objects whatever, though the solution  does not require anything more complex than strings. You will have to figure out how to use the features you  choose in javascript by reading about the language.</p>
+<p>&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 2)</span></p>
+<p>For problem 2 make a new version of the code from the previous problem so you can have both mountains and hills. The output will now represent three lines of output text. Specifically, modify the code so that the following build script  will produce the output shown.</p>
+<p class="code">//BUILD SCRIPT<br />
+flat(3)<br />
+mountain(3);<br />
+flat(2);<br />
+mountain(0);<br />
+flat(4);<br />
+hill(1);<br />
+flat(1);<br />
+//END SCRIPT</p>
+<p>Output:</p>
+<pre><span class="code">
+
+     ___     
+    /   \    /\      _
+___/     \__/  \____/ \_
+
+</span></pre>
+<p class="red">When you demonstrate your code the TA's will ask you to make slight changes to the build script portion and want to see your resulting output.</p>
+<p>&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 3)</span></p>
+<p class="segment-header"><span class="black-bold">Don't Bore Us, Get To The Chorus</span></p>
+<p>Problem 1 and 2 were a warm up,  now lets use the strategy of breaking a line of text into two lines for a more useful purpose.  We will again just do output on the console -you will not need the browser. This problem relates to part of your Assignment #1.</p>
+<p>The demo code folder contains two pieces of example code: <span class="code">file_read_synch.js</span> and <span class="code">file_read_asynch.js</span> that can read the lines of a text file and return an array containing those lines. One is an example of a synchronous file read the other an example of an asynchronous file read. Run both examples and study the differences in the code. You can use either for this problem but the intent really is that you use the asynchronous verison. Pay attention to where the result of console.log(&quot;Done&quot;); appears in the output for the two examples. Can you explain the difference?</p>
+<p>Background:</p>
+<p>Many musicians, especially guitar players, rely on chord and lyric sheets to learn and play songs. A popular format is to store chords and lyrics in a text file with the chord symbols embedded within the lyrics using square brackets like this.</p>
+<pre>
+Sister Golden Hair -America
+
+verse1:
+Well i [E] tried to make it sunday but i [G#min] got so damned depressed
+That i [A] set my sights on [E] monday and i [G#min] got myself undressed
+I ain't ready for the alter, but i [C#min] do [G#min] believe there's [A] times
+When a [F#min] woman sure can [A] be a friend of [E] mine [Esus2] [E]
+
+verse2:
+Well i [E] keep on thinkin bout you sister [G#min] golden hair surprise
+That i just can't live without you can't you [G#min] see it in my eyes
+I've been [A] one poor corre[F#min]spondent, i've been [C#min] too too [G#min] hard to [A] find
+But it [F#min] doesn't mean you [A] ain't been on my [E] mind [Esus2] [E]
+
+chorus:
+Will you [B] meet me in the middle will you [A] meet me in the [E] end
+Will you [B] love me just a little just en[A]ough to show you [E] care
+Well i [F#min] tried to fake it i [G#min] don't mind sayin i [A] just can't make it
+
+repeat intro, then verse 2, then chorus, then they do this
+doo-wop thing that uses the chorus (B - A - E) thing
+
+</pre>
+<p>This is a simplified version of what is known as chord pro format. It is a easy way to keep chords properly aligned with lyrics. Often text files in this format have a .crd extention or something like that but for our purposes .txt will do.</p>
+<p>When these files are displayed for the viewer, however, they are meant to be shown with the chords appearing above the lyrics as follows.</p>
+<pre>
+Sister Golden Hair -America
+
+verse1:
+       E                              G#min
+Well i  tried to make it sunday but i  got so damned depressed
+       A                 E             G#min
+That i  set my sights on  monday and i  got myself undressed
+                                   C#min G#min         A
+I ain't ready for the alter, but i  do believe there's  times
+       F#min           A               E     Esus2 E
+When a  woman sure can  be a friend of  mine
+</pre>
+<p>Exercise:</p>
+<p>Write the javascript that is necessary to read the lines from a chord pro text file in your <span class="code">songs</span> directory and display the song's lyrics with the chords in the right location <span class="black-bold">above</span> the lyrics.</p>
+<p>Your code will have to read the lines of the text file and convert each string containing both lyrics and chords into two strings: one containing the chords and one containing the lyrics. The chord string will have to have spaces appropriatetly placed so that  the chords will appear properly above the correct word in the lyrics. (Note to do this you should problably do everything using a mono-space font). Also you might want remove newline or return characters from the strings read in. I used the following when making up the tutorial demo: <span class="code">myString = myString.replace(/(\r\n|\n|\r)/gm,&quot;&quot;)</span>.</p>
+<p>When you have completed this exercise your output to the console might look something like this:</p>
+<p><img src="images/Problem3.png" width="923" height="363" alt="Problem3" /></p>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 4)</span></p>
+<p class="segment-header"><span class="black-bold">Colour My World</span></p>
+<p>Go to the <a href="https://www.npmjs.org">https://www.npmjs.org</a> web site and search for an npm module called &quot;colour&quot;. (note there is also a module called &quot;color&quot; but that is the wrong one.)</p>
+<p>Learn what service this module provides and look at the example code provided there to see how you can colour the text on your console screen.</p>
+<p>Install the module using the <span class="code">npm install colour</span> command in your console window. You should notice a <span class="code">node_modules</span> directory gets created as a result of the install.</p>
+<p>Now run the file <span class="code">colourTest.js</span> in the demo code folder. The output likely looks like this:</p>
+<p><img src="images/ColourTest.png" width="966" height="102"></p>
+<p>Study the code example. While it illustrates how to colour the text it shows something much more disturbing: it is unsafe to use a FOR-EACH loop to loop over the characters of javascript strings. You should always use a <span class="code">for(let i=0; i&lt;x.length; i++)</span> loop to go through the characters of a string, or the elements of an array. Again, be warned: <span class="black-bold">it is unsafe for use a FOR-EACH loop to traverse the characters of a string or the elements of an array in javascript</span>.</p>
+<p>Being aware of this warning,  modify the javascript code from problem 3 to use this colour module and to cause the song's lyrics to be shown in one colour and the chords above the lyrics to appear in a different colour as shown in this sample output.</p>
+<p><img src="images/Problem4.png" width="921" height="360" alt="Problem4" /></p>
+<p>&nbsp;</p>
+<p><span class="red">When you have completed these problems demonstrate your code to a TA's to get credit for the tutorial.</span> </p>
+<h2>Optional Advanced Problem: </h2>
+<p>Write the javascript required to prompt the user for a song name and then find that song in the songs directory for them.</p>
+<p>&nbsp;</p>
+
+</body>
+</html>

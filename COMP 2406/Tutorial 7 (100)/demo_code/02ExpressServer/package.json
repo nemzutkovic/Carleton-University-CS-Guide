@@ -1,0 +1,15 @@
+{
+  "name": "express_static_server",
+  "version": "1.0.0",
+  "description": "a simple static server built with express.js",
+  "main": "02_express_static_server.js",
+  "scripts": {
+    "test": "node 02_express_static_server.js"
+  },
+  "author": "L.D. Nel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "morgan": "^1.9.0"
+  }
+}

@@ -1,0 +1,51 @@
+public class PVector {
+  
+  public float x;
+  public float y;
+  
+  private String type = "PVector";
+  
+  public PVector(float xPos, float yPos) {
+    this.x = xPos;
+    this.y = yPos;
+  }
+  
+  public PVector() {
+   this.x = 0;
+   this.y = 0;
+  }
+  
+  public PVector getPos() { return this; }
+  
+  public void normalise() {
+    x = x/mag();
+    y = y/mag();
+  }
+  
+  public float angleBetween(PVector v) {
+    float delta_x = v.x - x;
+    float delta_y = v.y - y;
+    float theta_radians = (float)Math.atan2(delta_y, delta_x);
+    return theta_radians;
+  }
+  
+  public float mag() {
+    return (float)Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
+  }
+  
+  public float dot(PVector v) {
+    return (x*v.x)+(y*v.y);
+  }
+  
+  public float dist(PVector v) {
+    return (float)Math.sqrt(Math.pow(x-v.x,2) + Math.pow(y-v.y,2));
+  }
+  
+  @Override
+  public String toString() {
+    return "x: " + x + "   y: " + y;
+  }
+  
+}
+  
+  

@@ -1,0 +1,13 @@
+Program Author: Nemanja (Nem) Zutkovic (101085982)
+  
+Program Purpose:
+The purpose of the program is to simulate 100 battles between a band of pirates and our heroes, Timmy the Tortoise and Harold the Hare. During each simulation the program will determine the winner and collect statistics on survival rates. The winner of each simulation will be the survivor(s), which could be one of the heroes, both of the heroes or the pirates if both heroes are dead.
+
+Source Files:
+battle.c
+
+Compilation Command:
+gcc -Wall -o battle -std=c99 battle.c 
+
+Launching Command (in directory of generated executable):
+./battle

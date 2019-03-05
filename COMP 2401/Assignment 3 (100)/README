@@ -1,0 +1,23 @@
+Program Author: Nemanja (Nem) Zutkovic (101085982)
+  
+Program Purpose:
+The purpose of the program is to help Timmy and Harold escape from the clutches of an evil wizard. This will be achieved through writing a program that can rearrange books very quickly, in hopes of confusing the wizard. The program will add, remove and rearrange books from the collection. Finally, the collection of books will be displayed to the user in a variety of ways to reflect the program's functionality.
+
+Source Files:
+program.c
+
+Data Files:
+in.txt
+
+Compilation Command:
+gcc -Wall -o program -std=c99 program.c 
+
+Launching Commands (in directory of generated executable):
+./program < in.txt
+
+Operating Instructions:
+An in.txt file was provided to help streamline the operation of this program. To use the in.txt file, simply make sure it is in the same directory the executable is in, when launching the program. Feel free to change the contents of the in.txt file, but remember to keep an empty newline at the end of the in.txt file. There should also be no extra spaces at the end of each line. Lastly, the format of the in.txt is as such:
+Book Title
+Author Name
+Year Book Was Published
+...

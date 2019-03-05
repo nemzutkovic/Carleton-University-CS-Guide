@@ -1,0 +1,67 @@
+
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: id:  title:   author: year:  
+(1) Add book
+(0) Exit
+Enter your selection: 
+
+LIBRARY: 
+101  Title:                             Ender's Game;  Author:    Card, Orson Scott;  Year: 1985
+102  Title:                                     Dune;  Author:       Herbert, Frank;  Year: 1965
+110  Title:                               Foundation;  Author:        Asimov, Isaac;  Year: 1951
+111  Title:        Hitch Hiker's Guide to the Galaxy;  Author:       Adams, Douglas;  Year: 1979
+112  Title:                                     1984;  Author:       Orwell, George;  Year: 1949
+113  Title:               Stranger in a Strange Land;  Author:  Heinlein, Robert A.;  Year: 1961
+114  Title:                            Farenheit 451;  Author:        Bradbury, Ray;  Year: 1954
+115  Title:                   2001:  A Space Odyssey;  Author:    Clarke, Arthur C.;  Year: 1968
+116  Title:                                 I, Robot;  Author:        Asimov, Isaac;  Year: 1950
+117  Title:                        Starship Troopers;  Author:  Heinlein, Robert A.;  Year: 1959
+118  Title:     Do Androids Dream of Electric Sheep?;  Author:      Dick, Philip K.;  Year: 1968
+119  Title:                              Neuromancer;  Author:      Gibson, William;  Year: 1984
+120  Title:                                Ringworld;  Author:         Niven, Larry;  Year: 1970
+121  Title:                     Rendezvous with Rama;  Author:    Clarke, Arthur C.;  Year: 1973
+122  Title:                                 Hyperion;  Author:         Simmons, Dan;  Year: 1989
+

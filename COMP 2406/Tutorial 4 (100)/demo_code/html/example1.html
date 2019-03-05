@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+   <head>
+     <title>Canvas Size</title>
+     <script src="jquery-1.11.3.js"></script>
+      <style> 
+      #boxContainer{
+        margin: 20px;
+        text-align: center;
+      }
+         body {
+            background: #dddddd;
+         }
+     /*element selectors: */
+     canvas {
+        margin: 20px;
+      /*important here for padding to be 0 for mouse calculations */
+            padding: 0px; 
+     }
+     /* class selectors: */
+     .canvas {            
+            background: #ffffff;
+            border: thin inset #aaaaaa;
+         }
+         /*id selectors: */
+         #canvas1 {
+         }
+      </style>
+   </head>
+
+  <body>
+    <div id="boxContainer">
+    <canvas id='canvas1' class='canvas' width='1000' height='500'>
+    </canvas> 
+    </br>
+    <input type = "text"  id="userTextField" name = "userTextField"  value="" size = "60" />
+  </div>
+    <script src='canvasWithTimer.js'></script>
+  </body>
+
+</html>

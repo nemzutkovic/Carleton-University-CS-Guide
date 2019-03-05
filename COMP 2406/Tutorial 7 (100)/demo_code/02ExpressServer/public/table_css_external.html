@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<!-- table.html
+     An example of a simple table that uses only xhtml but also uses css
+     Look at how much simpler the xhtml file is getting as style elements
+     are relegated to css style sheets
+     This is not a good example of space utilization
+     
+     In this example the cellpadding has be moved to the css padding style
+     other remaining table attributes can also be so moved
+     
+     -->
+<html>
+
+<head> <title> A simple table with CSS styles </title>
+    <link rel = "stylesheet"  type = "text/css" 
+          href = "styles.css" />
+</head>
+<body>
+    <table border = "1" >
+      <caption> Gallery </caption>
+      <tr>
+        <th> </th>
+        <th> 
+		<p align="left"> Available<br/>Sizes<br/>(inches)</p> </th>
+        <th> Description </th>
+        <th> Image</th>
+      </tr>
+      <tr>
+        <th height="345" rowspan="3" > 		Africa  </th>
+        <td height="345" > 18 x 27
+        <p>24 x 36</p>
+		<p>30 x 40</p>
+		<p>&nbsp;</p>
+		</td>
+        <td height="345" valign="top" > 
+        <p>        
+        Lion in the morning dust<br/>
+		Kruger National Park,<br/>
+		South Africa
+		Photo data:<br/>
+		photographer: L.D. Nel<br/>
+		camera: Canon 400D<br/>
+		lens 500mm f/4 </p> 
+		</td>
+        <td height="345"> 
+		<img border="0" src="images/lion4.jpg" width="400" height="256" alt = "lion"/></td>
+      </tr>
+      <tr>
+        <th> 18 x 27
+        <p>24 x 36</p>
+		<p>30 x 40</p>
+		&nbsp;
+		</th>
+        <td  valign="top"> Wildebeast 
+		Gathering<br/>
+		Kalihari Dessert,<br/>
+		South Africa<br/>
+		Photo data:<br/>
+		photographer: L. D. Nel<br/>
+		camera: Canon 400D<br/>
+		lens: 500mm f/4</td>
+        <td> 
+		<img border="0" src="images/wildebeast1.jpg" width="400" height="258" alt = "wildebeast"/></td>
+      </tr>
+      <tr>
+        <th> 18 x 27<p>
+		24 x 36</p>
+		<p>30 x 40</p>
+		<p>48 x 72</p>
+		</th>
+        <td valign="top"> Wildebeast 
+		Migration<br/>
+		Kalihari Dessert,<br/>
+		South Africa<br/>
+        &nbsp;
+        <p>
+        Photo data:<br/>
+		photographer: L. D. Nel<br/>
+		camera: Canon 5D mkII<br/>
+		lens : 70-200 f/4
+		</p> 
+		</td>
+        <td> <img border="0" src="images/wildebeast2.jpg" width="400" height="267" alt = "wildebeast"/></td>
+      </tr>
+      <tr>
+        <th rowspan="2"> Algonquin </th>
+        <td> 18 x 27<p>
+		24 x 36</p>
+		<p>30 x 40</p>
+		<p>48 x 72</p>
+		&nbsp;</td>
+        <td valign="top"> Canoe in the 
+		Mist<br/>
+		Algonquin Park,<br/>
+&nbsp;Ontario, Canada<p>&nbsp;</p>
+		<p>Photo data:<br/>
+		photographer: L.D. Nel<br/>
+		camera: Canon 40D<br/>
+		lens: 70-200 f/2.8</p></td>
+        <td> 
+		<img border="0" src="images/misty.jpg" width="400" height="267" alt= "canoe"/></td>
+      </tr>
+      <tr>
+        <th> 18 x 27
+        <p>24 x 36</p>
+		<p>30 x 40</p>
+		<p>&nbsp;</p></th>
+        <td valign="top"> Moose Cows<br/>
+		Algonquin Park, <br/>
+		Ontario, Canada<p>&nbsp;</p>
+		<p>photo data:<br/>
+		photographer: L.D. Nel<br/>
+		camera: Canon 40D<br/>
+		lens: 70-200 f/2.8  </p></td>
+        <td> 
+		<img border="0" src="images/moose.jpg" width="400" height="267" alt = "moose"/></td>
+      </tr>
+    </table>
+  </body>
+</html>

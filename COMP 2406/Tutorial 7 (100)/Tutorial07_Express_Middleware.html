@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<head>
+<title>COMP2406</title>
+<link href="template.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<p class="header">COMP 2406 - Fall 2017 Tutorial #7</p>
+<p class="header subheader">Introducing Express Middleware</p>
+<hr/>
+<p>&copy; L.D. Nel 2017</p>
+<hr />
+<p class="red">Revisions</p>
+<p class="red">revisions will be noted here.</p>
+<hr />
+<p class="segment-header">Description:</p>
+<p>The purpose of this tutorial is to get you  started with Express, Express Middleware and make you aware of the  Express Generator utility for building a default &quot;Hello World&quot; express-based app. We will build a simple static server using three aproaches:</p>
+<p>1) Using Node.js to read files from a choosen directory -just to review.</p>
+<p>2) Using the npm module <span class="code">express</span> and adding functionallity we need.</p>
+<p>3) Use the npm global module <span class="code">express-generator</span> to generate the framework  app that could be used as the starting point for express.js apps.</p>
+<p class="red">IMPORTANT: This tutorial is meant as a homework assignment and for you to demonstrate your results at your tutorial session. You will not be able to complete it if you only start when you come to the tutorial. You will need to read about and learn those aspects of javascript that pertain to this tutorial on your own and come up with a strategy to solve the problems.</p>
+<p>To get credit for the tutorial you must complete, or make significant progress on, the exercise problems provided and demonstrate your results to the tutorial TA before you leave the tutorial.<br />
+</p>
+<hr/>
+<p class="segment-header">Instructions:<br />
+</p>
+<p class="segment-header"><span class="black-bold">Problem 1) Static Server with Node.js Review</span></p>
+<p>Open the directory <span class="code">01NodeSever</span> found in the demo code. Run the simple static server  by executing </p>
+<p class="code">node 01_static_node_server.js</p>
+<p>and then visit the following addresses with your browser:</p>
+<p class="code">http://localhost:3000/greeting.html</p>
+<p class="code">http://localhost:3000/index.html</p>
+<p class="code">http://localhost:3000/table.html</p>
+<p class="code">http://localhost:3000/table_css_internal.html</p>
+<p class="code">http://localhost:3000/table_css_external.html</p>
+<p>These are all files found in the <span class="code">public</span> subdirectory of the <span class="code">01NodeServer</span> directory.</p>
+<p>For <span class="code">table_css_internal.html</span> you should see a table that looks like the following:</p>
+<p><img src="images/problem1A.png" width="1111" height="954" alt="problem1A" /></p>
+<p>&nbsp;</p>
+<p>Open the <span class="code">01_static_node_server.js</span> file and review the structure of the code. We will use this as a basis of comparision to Express.js servers created moving forward. This code should be very familiar to you by now.</p>
+<p>&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 2)</span></p>
+<p>For problem 2 we are going to use the npm <span class="code">express</span> module to build a simple static server from scratch. We will also learn about setting up your initial <span class="code">package.json</span> file.</p>
+<p>Open the directory <span class="code">02ExpressServer</span> found in the demo code.</p>
+<p>Try and run the server by executing:</p>
+<p class="code">node 02_express_static_server.js</p>
+<p>You should get an error like the following:</p>
+<p><img src="images/2AmissingModule.png"  alt="problem2A" /></p>
+<p>&nbsp;</p>
+<p>The problem is that the <span class="code">express</span> module has not yet been loaded. You could install the module with the command <span class="code">npm install express</span> but instead we want to install it using a <span class="code">package.json</span> file. We will start by using npm to help us generate a starting <span class="code">package.json</span> file.</p>
+<p>To generate a starting <span class="code">package.json</span> file execute:<br>
+</p>
+<p class="code">&gt;npm init</p>
+<p>You will be asked several questions to fill some of the attributes. Do this and answer the questions as shown on the screen capture below.</p>
+<p><img src="images/02npmInit.png"></p>
+<p>&nbsp;</p>
+<p>At this point you should have a <span class="code">package.json</span> file that looks something like the following:</p>
+<pre>
+{
+  "name": "express_static_server",
+  "version": "1.0.0",
+  "description": "a simple static server built with express.js",
+  "main": "02_express_static_server.js",
+  "scripts": {
+    "test": "node 02_express_static_server.js"
+  },
+  "author": "L.D. Nel",
+  "license": "ISC"
+}
+</pre>
+<p>To learn more about how npm interprets the attributes in the <span class="code">package.json</span> file see: <a href="https://docs.npmjs.com/files/package.json">https://docs.npmjs.com/files/package.json</a>. You can try an run the server now  by executing either:</p>
+<p class="code">npm test</p>
+<p>or</p>
+<p class="code">node 02_express_static_server.js</p>
+<p>Again when you try and run the server you will get an error message about the missing express module. </p>
+<p>Install the express module by executing:</p>
+<p class="code">npm install express --save</p>
+<p>(The<span class="code"> --save</span> option causes the dependency to be written into your <span class="code">package.json</span> file.)</p>
+<p>The console output for the install should be something like the following:</p>
+<p><img src="images/expressInstall.png" alt="install" /></p>
+<p>&nbsp;</p>
+<p>Your package.json file should now look like the following. Notice a dependency has been added with the version number of the <span class="code">express</span> module that was installed:</p>
+<pre>
+{
+  "name": "express_static_server",
+  "version": "1.0.0",
+  "description": "a simple static server built with express.js",
+  "main": "02_express_static_server.js",
+  "scripts": {
+    "test": "node 02ExressServer.js"
+  },
+  "author": "L.D. Nel",
+  "license": "ISC",
+  "dependencies": {
+    <span class="red">"express": "^4.16.2"</span>
+  }
+}
+
+</pre>
+<p>Also notice that your directory now contains a <span class="code">node_modules</span> folder that contains all the modules installed. (Express and all the modules it depends on). </p>
+<p>Now that we have the correct express dependency in our <span class="code">package.json</span> file we can use this file in the future to install the required modules. To test this do the following:</p>
+<p>1) Delete the <span class="code">node_modules</span> directory completely.</p>
+<p>2) Execute <span class="code">npm install</span></p>
+<p><span class="code">npm install</span> will install all the modules in the dependencies section of your <span class="code">package.json</span> file (and create the <span class="code">node_modules</span> directory if necessary).</p>
+<p>When the server launches test it with the following:</p>
+<p class="code">http://localhost:3000/index.html</p>
+<p>You should see the familiar web site but no console output on the server console. Next try:</p>
+<p class="code">http://localhost:3000/Louis.html</p>
+<p>This requested static file does not exist in our public directory on the server. You will notice the server code is writing some console output and the browser received a 404 status response (indicating the file was not available.) We will examine, and modify, this behaviour in the next question.</p>
+<p class="segment-header">&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 3)</span></p>
+<p>Open the express server code provided in file <span class="code">02_express_static_server.js</span> it should look like the following.</p>
+<pre>
+const express = require('express'); 
+const app = express();
+
+const PORT = process.env.PORT || 3000
+const ROOT_DIR = '/public'; //root directory for our static pages
+
+//Middleware
+app.use(express.static(__dirname + ROOT_DIR)); //provide static server
+
+//Routes
+//catch all requests an log them using app.all route
+app.all('*', function(req, res, next){
+  console.log('-------------------------------');
+  console.log('req.path: ', req.path);
+  console.log('serving:' + __dirname + ROOT_DIR + req.path);
+  next(); //allow next route or middleware to run
+});
+
+//start server
+app.listen(PORT, err => {
+  if(err) console.log(err)
+  else {console.log(`Server listening on port: ${PORT}`)}
+})
+</pre>
+<p>&nbsp;</p>
+<p>Notice the <span class="code">.use</span> middleware that implements a static server. It is just one line of code in the express application. Also we are catching all the routes not handled by the static server and printing, or logging, some request information for files that don't exist. Finally there appears to be no code that sends the 404 message back to the client. This is default behaviour of the express-based server.</p>
+<p>For this problem we want to write our own middleware function to do the logging to the console on every request.</p>
+<p>A <span class="bold">middleware</span> function typically looks like the following:</p>
+<pre>
+function(req, res, next){
+  //do some stuff
+  next(); //allow next middleware to run
+}
+</pre>
+<p>The middleware function usually calls <span class="code">next()</span> as its last statement to allow the next attached middleware to run. A middleware function could end the chain by sending a response to the client and not calling <span class="code">next()</span> as well but here we want to call <span class="code">next()</span> because we are just logging information and don't want to interupt the normal flow and routing of the client request.</p>
+<p>Remove the <span class="code">app.all</span> route code and replace it with the following middleware instead. Middleware is attached to the app using the <span class="code">.use</span> method of the <span class="code">app</span> object. The order is very important -it needs to go before the static server middleware because it needs to run before that. Middleware will be executed in the order of the <span class="code">.use</span> statements.</p>
+<p>Your server should now look like the following:</p>
+<pre>
+const express = require('express'); 
+const app = express();
+
+const PORT = process.env.PORT || 3000
+const ROOT_DIR = '/public'; //root directory for our static pages
+
+//Middleware
+app.use(function(req, res, next){
+  console.log('-------------------------------');
+  console.log('req.path: ', req.path);
+  console.log('serving:' + __dirname + ROOT_DIR + req.path);
+  next(); //allow next route or middleware to run
+});
+app.use(express.static(__dirname + ROOT_DIR)); //provide static server
+
+//Routes
+
+//start server
+app.listen(PORT, err => {
+  if(err) console.log(err)
+  else {console.log(`Server listening on port: ${PORT}`)}
+})
+</pre>
+<p>Execute your new server and verify that the server console output appears for every request -even the requests for files served from the <span class="code">public</span> directory by the static server middleware:</p>
+<p>&nbsp;</p>
+<p><img src="images/problem3A.png" alt="problem3A" /></p>
+<p>&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 3)</span></p>
+<p>One of the most popular logging modules is an npm module called <span class="code">morgan</span>.</p>
+<p>For this  problem we want you to add the morgan logger to the express server as middleware. Here are the steps:</p>
+<p>1) Install the <span class="code">morgan</span> logger such that it updates the <span class="code">package.json</span> file as well:</p>
+<p class="code">npm intall morgan --save</p>
+<p>Your package.json file should now look like the following: </p>
+<pre>
+{
+  "name": "express_static_server",
+  "version": "1.0.0",
+  "description": "a simple static server built with express.js",
+  "main": "02_express_static_server.js",
+  "scripts": {
+    "test": "node 02_express_static_server.js"
+  },
+  "author": "L.D. Nel",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "morgan": "^1.9.0"
+  }
+}
+</pre>
+<p> 2) Modify the server to require morgan as well:</p>
+<p><span class="code">const logger = require('morgan');  //request logger</span><br />
+</p>
+<p>3) Add the logger as middleware to your server:</p>
+<p class="code"><span class="code">//use morgan logger to keep request log files<br />
+app.use( logger('dev'));</span></p>
+<p>Now re-run the server. You should see the morgan logger writing output the console: (It will be interleaved with our own logger if you still have that active.)</p>
+<p><img src="images/problem2D.png" width="1094" height="314" alt="problem2D" /></p>
+<p>&nbsp;</p>
+<p>The first time you load a file you should see the &quot;200&quot; success code. If you reload a file you will most likely see the &quot;304&quot; code as shown below. What does that mean?</p>
+<p><br />
+</p>
+<p><img src="images/problem2E.png" width="1093" height="284" alt="problem2E" /></p>
+<p>&nbsp;</p>
+<p>The morgan logger can be used to write logs to a file instead of the console. To learn more about the morgan logger visit: <a href="https://www.npmjs.com/package/morgan">https://www.npmjs.com/package/morgan</a></p>
+<p>Congratulations you are now well underway to writing your own middleware and using  middleware available on the npm web site.</p>
+<p>&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 4)</span></p>
+<p>You can also &quot;auto-magically&quot; generate a complete default express app using the <span class="code">express-generator</span> module. Here we will outline the install instructions. </p>
+<p>To install the express app generator we do a global install (as indicated below by the <span class="code">-g</span> option). Global installs are meant for things like command line tools. The express module for running your servers should <span class="bold">not</span> be installed with a global install -that should always end up in a local <span class="code">node_modules</span> directory.</p>
+<p>To install the the <span class="code">express-generator</span> open a command window and execute:</p>
+<p class="code">npm install -g express-generator</p>
+<p>The <span class="code">-g</span> option is important and will cause the express generator tool  to be loaded &quot;globally&quot; at the same location as where your nodejs and npm applications are installed. If you don't use the <span class="code">-g</span> option you are likely to get an error. On my machine I see the following as the result of executing the above command:</p>
+<p>&nbsp;</p>
+<p><img src="images/optional1-install.png"  alt="3A" /></p>
+<p>&nbsp;</p>
+<p>(NOTE: For Max OS X and Linux users, if there is an error installing globally, most likely your system <br />
+  requires root/ administrator rights to write to the folder. In this case, <span class="code">$ sudo npm install -g express-generator</span> might be needed.)</p>
+<p>To verify that <span class="code">express-generator</span> is installed execute:</p>
+<p class="code">express --version</p>
+<p>You should see the output something like: <span class="code">4.15.5</span></p>
+<p>Now create a directory for this problem called <span class="code">03ExpressGenerator,</span> open a command window on that directory. The directory should be empty at this point:</p>
+<p><img src="images/problem3B.png"  alt="problem3B" /></p>
+<p>&nbsp;</p>
+<p>Now generate the default framework app by executing:</p>
+<p class="code">express</p>
+<p>Here is the output:</p>
+<p><img src="images/problem3E.png" alt="3E" /></p>
+<p>&nbsp;</p>
+<p>Observe that some files have been added to the directory:</p>
+<p><img src="images/problem3E2.png"  alt="3E2" /></p>
+<p>This time the package.json file looks like the following:</p>
+<pre>
+{
+  "name": "03expressgenerator",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.15.5",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
+  }
+}
+</pre>
+<p>To install the modules for this default app execute: (you will notice a <span class="code">node_modules</span> directory gets created):</p>
+<p class="code">npm install</p>
+<p>To run the app execute:</p>
+<p class="code">npm start</p>
+<p>or alternatively</p>
+<p class="code">node ./bin/www</p>
+<p>Once the server is running you can use your browser to visit <span class="code">http://localhost:3000</span> and you should see:</p>
+<p><img src="images/problem3F.png" width="543" height="332" alt="problem3F" /></p>
+<p>&nbsp;</p>
+<p>Congratulations you have a scaffold express app running.</p>
+<p>&nbsp;</p>
+<p><span class="red">When you have completed these exercises show your results to the TA's to get credit for the tutorial.</span></p>
+<p>&nbsp;</p>
+<p><span class="segment-header"><span class="black-bold">Optional)</span></span></p>
+<p>This express app is already set up to serve static pages. It has a <span class="code">public</span> directory already built. You should now be able to put in there the same files that were being served in the previous questions. Note this public directory has some subdirectories for <span class="code">images</span>, <span class="code">javascript</span>, and <span class="code">css</span> style sheets. So play around with placing your files in the appropriate places until you have this app serving the same static files as in the other two questions and correctly finding the images and css styles.</p>
+<p class="segment-header"></p>
+<p class="red">&nbsp;</p>
+<p>&nbsp;</p>
+
+</body>
+</html>

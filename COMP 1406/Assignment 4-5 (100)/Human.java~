@@ -1,0 +1,96 @@
+//Rusen Mustafa Ozoruc
+//101010199
+
+import java.awt.*;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.io.*;
+import javax.sound.sampled.*;
+
+public class Human extends Character{
+
+ public Human(int xPos, int yPos, String name) {
+   super(xPos,yPos, 8 , name, 80, 15, "Human");
+   setTarget(new PVector(xPos,yPos));}
+  
+  //where everything about this character will be drawn (ie. rectangle, image)
+  public void paint(Graphics g) {
+    g.setColor(Color.GREEN);
+    g.fillRect((int)getxPos(), (int)(getyPos()), getWidth(), getHeight());
+  }
+  
+   public void move() {
+     /*
+    if (getCPos().dist(DrawWorld.player.getCPos())<350 && getJustAttacked() == false) {
+      setTarget(DrawWorld.player);
+    } else if (!pathFinding() || (getTarget().getTarget() == DrawWorld.player.getCPos() && getCPos().dist(DrawWorld.player.getCPos())>=350)) {
+      setTarget((new PVector()).random(getCPos()));
+    }
+    */
+     
+     if (!pathFinding()) {
+       setTarget((new PVector()).random(getCPos()));
+     }
+    
+    if (pathFinding()) {
+      updateMovement();
+    }
+    checkCollision();
+  }
+  
+  public boolean pathFinding() {
+    if (getCPos().dist(getTarget().getTarget()) < 5) {
+      setJustAttacked(false);
+      return false;
+    }
+    return true;
+  }
+    public  void makeNoise(Character c) {
+    try {
+      String a;
+      if (c.getHealth() <=0){
+        a = World.fileLocation + "\\death" + ".wav";
+      }
+      else{
+        a = World.fileLocation + "\\" + c.getRace() + ".wav";
+      }
+      //System.out.println("Played this sound" + " " + a);
+      AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(a).getAbsoluteFile());
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioInputStream);
+      clip.start();
+    } catch(Exception ex) {
+      //System.out.println("Error with playing sound.");
+      ex.printStackTrace();
+    }
+  }
+  public void checkCollision() {
+    checkCollisionWithRoom();
+    
+    for (int i = 0; i < DrawWorld.characterList.size(); i++) { //size - 1 because of self, +1 because of player, net total is original size
+      Character c = DrawWorld.characterList.get(i);
+      if (c.getRace().equals(getRace())) { //checks to see if race does not match its own
+        PVector cV = c.getPos(); // save the PVector of the character
+        if ( (cV.x < getPos().x) && (cV.x+c.getWidth() > getPos().x) && (cV.y < getPos().y) && (cV.y+c.getHeight() > getPos().y) ) {
+          //System.out.println("tagged: " + c);
+        }
+      }
+    }    
+    Character c = DrawWorld.player;
+    PVector cV = c.getPos();
+    //kinda buggy needs to be fixed
+    if ( (cV.x < getPos().x) && (cV.x+c.getWidth() > getPos().x) && (cV.y < getPos().y) && (cV.y+c.getHeight() > getPos().y) ) {    
+      if (getJustAttacked() == false ) {
+        //System.out.println("Damage: " + getDamage() + "    Health: " + c.getHealth());
+        c.attacked(getDamage());
+        setJustAttacked(true);
+        setTarget(new PVector(((float)getDir().x*-(float)Math.PI)*50, getDir().y*-1*50)); //need to fix direction
+        //System.out.println(pathFinding() + "   " + c.getHealth());
+      }
+      if ( c.getHealth() <= 0 ) {        
+        //System.out.println(c + " has died...");
+        System.exit(0);
+      }
+    }        
+  }
+}

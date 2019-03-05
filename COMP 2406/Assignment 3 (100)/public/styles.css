@@ -1,0 +1,58 @@
+/* Nemanja Zutkovic (101085982) */
+
+html {
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#recipes {
+    text-align: justify;
+}
+
+.recipe {
+    width: 30%;
+    display: inline-block;
+    border: 1px solid grey;
+    margin: 15px;
+}
+
+.recipe img {
+    width: 100%;
+    height: 300px;
+}
+
+h2 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:focus {
+    text-decoration: none;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+button {
+    height: 35px;
+    color: white;
+    background-color: lightskyblue;
+    font-family: 'Roboto', sans-serif;
+}
+
+input {
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-left: 5px;
+}

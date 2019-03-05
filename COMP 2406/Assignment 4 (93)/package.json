@@ -1,0 +1,22 @@
+{
+  "name": "Assignment4",
+  "version": "0.0.1",
+  "description": "JSON Package for Assignment 4",
+  "main": "mainserver.js",
+  "scripts": {
+    "test": "start"
+  },
+  "author": "Nemanja Zutkovic",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "hbs": "^4.0.1",
+    "line": "^0.1.8",
+    "line-reader": "^0.4.0",
+    "morgan": "^1.9.0",
+    "reader": "0.0.8",
+    "serve-favicon": "^2.4.5",
+    "sqlite": "^2.8.0",
+    "sqlite3": "^3.1.13"
+  }
+}

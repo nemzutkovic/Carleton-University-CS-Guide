@@ -1,0 +1,14 @@
+{
+  "name": "mongodb_access",
+  "version": "1.0.0",
+  "description": "",
+  "main": "01B_db_access_WRONG1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ldnel",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "2.x"
+  }
+}

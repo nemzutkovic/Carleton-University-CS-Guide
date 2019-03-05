@@ -1,0 +1,91 @@
+1
+108
+Ender's Game
+Card, Orson Scott
+1985
+Fiction
+1
+109
+Dune
+Herbert, Frank
+1965
+Fiction
+1
+110
+Foundation
+Asimov, Isaac
+1951
+Fiction
+1
+111
+Hitch Hiker's Guide to the Galaxy
+Adams, Douglas
+1979
+Fiction
+1
+112
+1984
+Orwell, George
+1949
+Fiction
+1
+113
+Stranger in a Strange Land
+Heinlein, Robert A.
+1961
+Fiction
+1
+114
+Farenheit 451
+Bradbury, Ray
+1954
+Non-Fiction
+1
+115
+2001:  A Space Odyssey
+Clarke, Arthur C.
+1968
+Non-Fiction
+1
+116
+I, Robot
+Asimov, Isaac
+1950
+Fiction
+1
+117
+Starship Troopers
+Heinlein, Robert A.
+1959
+Fiction
+1
+118
+Do Androids Dream of Electric Sheep?
+Dick, Philip K.
+1968
+Non-Fiction
+1
+119
+Neuromancer
+Gibson, William
+1984
+Non-Fiction
+1
+120
+Ringworld
+Niven, Larry
+1970
+Non-Fiction
+1
+121
+Rendezvous with Rama
+Clarke, Arthur C.
+1973
+Non-Fiction
+1
+122
+Hyperion
+Simmons, Dan
+1989
+Fiction
+0

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> {{title}} </title>
+</head>
+<body>
+   <h1>{{title}}</h1>
+   <input type="text" name="ingredient" id="ingredient" style="width: 300px"/>
+   <button id="spiceSubmit" onclick="getSpices()" style="background-color:#87cefa">Search Spice</button>
+   <button id="ingredientSubmit" onclick="getIngredients()" style="background-color:#87cefa">Search Ingredient</button>
+<div>
+   {{#each recipeEntries}}
+      <p><a href= 'recipe/{{this.id}}' target="_blank">{{this.id}} {{this.recipe_name}}</a></p>
+   {{/each}}
+</div>
+<script>
+
+function getSpices(){
+	let spice = document.getElementById('ingredient').value;
+	if(spice === ''){
+		return alert('Please enter a spice');
+	}
+	location.href = "http://localhost:3000/recipes?spices=" + spice;
+}
+function getIngredients(){
+	let ingredient = document.getElementById('ingredient').value;
+	if(ingredient === ''){
+		return alert('Please enter a ingredient');
+	}
+	location.href = "http://localhost:3000/recipes?ingredients=" + ingredient;
+}
+
+</script>
+</body>
+</html>

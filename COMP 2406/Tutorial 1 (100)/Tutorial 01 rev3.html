@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>2406 Tutorial</title>
+<link href="template.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<p class="header">COMP 2406 - Fall 2015 Tutorial #1</p>
+<p class="header subheader">Hello World in Node.js</p>
+<hr/>
+<p>&copy; L.D. Nel 2017</p>
+<p><span class="red">Revisions:</span></p>
+<p><span class="red">Rev 3:</span> -Fixed some typos<br>
+<span class="red">Rev 2</span>: I changed the line :<span style="background-color:#ffffff;color:#000000;font-family:'Courier New';font-size:14.4pt;">.listen(<span style="color:#0000ff; ">3000</span>,&#32;<span style="color:#008000; font-weight:bold; ">&quot;127.0.0.1&quot;</span>);</span> in the hello world program to <span style="background-color:#ffffff;color:#000000;font-family:'Courier New';font-size:14.4pt;">.listen(<span style="color:#0000ff; ">3000</span>);</span>instead. It will allow people running the code on Open Stack to be reached by others.</p>
+<hr />
+<p class="segment-header">Description:</p>
+<p>The purpose of this tutorial is to get you started working with node.js and javascript. Basically to ensure you are able to launch node.js and do some simple investigation of javascript objects.</p>
+<p>IMPORTANT: To do this tutorial you must first have set up your machine by installing node.js and npm. The lecture notes section of the course web site has some screen capture install instructions for Windows 10. Nodejs is obtained from the node.js site: <a href="https://nodejs.org">https://nodejs.org</a> . There are also our startup instructions for using the VirtualBox images or the Open Stack Lubuntu image which have node and npm pre-installed as well. If you are using Mac you will have had to set up your machine as well. The easiest place to start is just to install nodejs natively on your machine or use the Windows machines in the computer lab which also has node installed. Once you get comfortable you can try the virtual linux images.</p>
+<p>The tutorial and code files are available on the course web site and there should also be a .zip with all the files so you can download them all at once.</p>
+<p>To get credit for the tutorial you must complete, or make significant progress, on the exercise problems provided and demonstrate your results to the tutorial TA before you leave the tutorial.<br />
+</p>
+<p>These tutorials are based on the hello world lecture demo done in class and will  use similar files.</p>
+<hr/>
+<p class="segment-header">Instructions:</p>
+<p class="segment-header black-bold">Overview</p>
+<p>In this tutorial you will repeat the &quot;Hello World&quot; demos done in class but this time yourself on your machine, or the lab machine. To do these exercises you need to open a CMD terminal window on the directory from where you can execute the node.js application. </p>
+<p>If you has installed node.js using the &quot;install button&quot; from the node.js web site (i.e. did an actual install) you should be able to run node from any directory.</p>
+<p>For Linux users:</p>
+<p>On the linux virtual image for COMP2404-2406-F17 nodejs should be installed already so you just need to open a terminal window.</p>
+<p>The rest of this tutorial, and screen captures, will describe things from the Windows experience with come screen captures from the Linux image (Mac OS should be similar). </p>
+<p>To confirm the install open the command terminal and execute<br />
+  <span class="code">&gt;node -v</span></p>
+<p>You should get the version number as a response (see screen capture below).</p>
+<p>To confirm npm (node package manager) is installed execute<br />
+<span class="code">&gt;npm -v</span></p>
+<p>Finally to enter the node REPL (read, evaluate, print, loop) execute</p>
+<p class="code">&gt;node</p>
+<p>then try</p>
+<p class="code">&gt;1+2;</p>
+<p>and your should see the result<br />
+  <span class="code">3</span></p>
+<p>To get out of the REPL loop execute<br />
+<span class="code">&gt;.exit</span></p>
+<p>Here on the Microsoft CMD window (from 2015)</p>
+<p><img src="images/intro.png" width="809" height="503" alt="intro" /></p>
+<p>Here on the 2017 linux image:</p>
+<p><img src="images/01version.png" width="891" height="187"></p>
+<p>&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Problem 1)</span></p>
+<p>Download the file in the tutotial 01 <span class="code">demo_code</span> folder called <span class="code">01_HelloWorld.js</span> and place it in a convenient directory. Open a CMD terminal to the same directory.</p>
+<p>In the CMD window execute: <span class="code">node 01_HelloWorld.js</span> You should now have a simple server running listening for client requests coming to IP address 127.0.0.1 on port 3000. (You can stop the server by typing CNTL-C.)</p>
+<p><img src="images/problem1-1.png" width="997" height="163" alt="p1-1" /></p>
+<p>Open a web browser, like Chrome, Firefox, IE, or Safari, and go to the url address: <span class="code">http://localhost:3000</span> or alternatively <span class="code">http://127.0.0.1:3000</span> (This is the loopback address by which you can talk to yourself over the internet. localhost always maps to IP address 127.0.0.1) The screen captures are for the Chrome browser and the rest of the tutorial will discuss things from the point of view of the Chrome  (the worlds most popular browser by far).<br />
+</p>
+<p>Your browser should show: &quot;Hello World 1000&quot; as shown below. </p>
+<p><img src="images/problem1-2.png" width="559" height="162" alt="p1-2" /></p>
+<p>You now have a simple HTTP server running. Hit the page refresh a few times on your browser. See what happens to the number being output (does it appear to increment by 2 each time you refresh?)</p>
+<p>You can quit the server, by typing CNTL-C in Windows.<br />
+</p>
+<p>Open the <span class="code">01_HelloWorld.js</span>  file in your favourite text editor. The code should look something like:</p>
+<pre style="background-color:#ffffff;color:#000000;font-family:'Courier New';font-size:14.4pt;"><span style="color:#808080; font-style:italic; ">/*<br /></span><span style="color:#808080; font-style:italic; ">Hello&#32;World&#32;example&#32;to&#32;serving&#32;string&#32;to&#32;client<br /></span><span style="color:#808080; font-style:italic; ">*/<br /></span><span style="color:#808080; font-style:italic; ">//To&#32;test&#32;use&#32;browser&#32;to&#32;view&#32;http://localhost:3000<br /></span><span style="color:#808080; font-style:italic; ">//Cntl+C&#32;to&#32;stop&#32;server<br /></span><span style="color:#808080; font-style:italic; "><br /></span><span style="color:#000080; font-weight:bold; ">var&#32;</span>http&#32;=&#32;require(<span style="color:#008000; font-weight:bold; ">'http'</span>);<br /><span style="color:#000080; font-weight:bold; ">var&#32;</span>counter&#32;=&#32;<span style="color:#0000ff; ">1000</span>;&#32;<br /><br />http.createServer(<span style="color:#000080; font-weight:bold; ">function&#32;</span>(request,response){<br />&#32;&#32;&#32;<span style="color:#808080; font-style:italic; ">//respond to client</span><br />&#32;&#32;&#32;response.writeHead(<span style="color:#0000ff; ">200</span>,&#32;{<span style="color:#008000; font-weight:bold; ">'Content-Type'</span>:&#32;<span style="color:#008000; font-weight:bold; ">'text/plain'</span>});<br />&#32;&#32;&#32;response.write(<span style="color:#008000; font-weight:bold; ">'Hello</span><span style="color:#000080; font-weight:bold; ">\n</span><span style="color:#008000; font-weight:bold; ">'</span>);<br />&#32;&#32;&#32;response.write(<span style="color:#008000; font-weight:bold; ">'World</span><span style="color:#000080; font-weight:bold; ">\n</span><span style="color:#008000; font-weight:bold; ">'</span>);<br />&#32;&#32;&#32;<span style="color:#808080; font-style:italic; ">//end&#32;HTTP&#32;response&#32;and&#32;provide&#32;final&#32;data&#32;to&#32;send<br /></span><span style="color:#808080; font-style:italic; ">&#32;&#32;&#32;</span>response.end(<span style="color:#008000; font-weight:bold; ">&quot;[&quot;</span>+&#32;counter++&#32;+&#32;<span style="color:#008000; font-weight:bold; ">&quot;]</span><span style="color:#000080; font-weight:bold; ">\n</span><span style="color:#008000; font-weight:bold; ">&quot;</span>);<br />}).listen(<span style="color:#0000ff; ">3000</span><span style="color:#008000; font-weight:bold; "></span>);<br />console.log(<span style="color:#008000; font-weight:bold; ">'Server&#32;Running&#32;at&#32;http://127.0.0.1:3000&#32;&#32;CNTL-C&#32;to&#32;quit'</span>);<br />console.log(<span style="color:#008000; font-weight:bold; ">'To&#32;test&#32;with&#32;browser&#32;visit:&#32;http://localhost:3000'</span>);</pre>
+<p>&nbsp;</p>
+<p>Study this code and start to get familiar with this simple server. Is it obvious from this code why the counter might increment by two when the browser page is refreshed -probably not. You are not expected to understand all this syntax at this point, but start to notice the form (especially the nested declaration of a function with no apparent name.)</p>
+<p>&nbsp;</p>
+<h2>Problem 2)</h2>
+<p>Next lets look at the network traffic between the browser and the server. We will describe this from the perspective of the Chrome browser (or Chromium on linux). (You will have to do some research to see how to locate the developer tools for other browsers if you don't want to use Chrome.)</p>
+<p>Shut down the server (CNTL-C) and restart it to reset the counter.</p>
+<p>This time open the Chrome brower but before you visit the page open its deveoper tools as follows. (<span class="black-bold">Menu icon/More Tools/Developer Tools</span>)</p>
+<p><img src="images/problem2-1.png" width="730" height="615" alt="p2-1" /></p>
+<p>This should open the developer tools. Click on the <span class="black-bold">Network</span> tab to so it will show HTTP messages between the browser and the server.</p>
+<p><img src="images/problem2-2.png" width="1131" height="291" alt="p2-2" /></p>
+<p>&nbsp;</p>
+<p>Now with the developer tool open visit http://localhost:3000 with the brower and you should see the traffic between the browser and your server.</p>
+<p>It would appear that two messages are being sent to the server, one with the name localhost and one with favicon.ico (Could this explain why the counter is incrementing by two when we refresh the page). Try refreshing it a few times.</p>
+<p><img src="images/problem2-3.png" width="1184" height="344" alt="p2-3" /></p>
+<p>Click on the message marked &quot;localhost&quot; and it should open a details window as shown below (look in the Headers tab).</p>
+<p><img src="images/problem2-4.png" width="907" height="865" alt="p2-4" /></p>
+<p>In this details window locate the following bits of information:</p>
+<p>The URL being visited. </p>
+<p>The HTTP request method (e.g. GET, POST, ...).</p>
+<p>The status code of 200 back to the browser indicating success.</p>
+<p>The MIME content type of the response data. </p>
+<p>Look at some of the other information that is part of this message. The Request Headers are information that comes from the browser as part of the request and the Response Headers are part of the information that is sent back in response to the client.</p>
+<h2>&nbsp;</h2>
+<h2>Problem 3)</h2>
+<p>The request and response mentioned in the previous question are in fact represented by the request and repsonse arguments in the createServer(function(request,response){...}); callback function. It is called a &quot;callback&quot; function because it will be &quot;called back&quot; when a HTTP request comes in. Basically the callback function examines the request object to see what the client wanted and builds up the response object to represent the response. Once the response is completed it is ended which results in an HTTP response being sent back to the client.</p>
+<p>Next we are interested in actually getting access to some of this information right within our server javascript. That is, we want to extract information from the request object that arrived with the HTTP request.</p>
+<p>Recall from the lecture demo that you can examine javascript objects by printing their key-value pair contents. Lets do that with the request object to extract information about what the client might want.</p>
+<p>Add the following code to the server javascript (just before the part where we start writing to the response) and then restart the server.</p>
+<pre style="background-color:#ffffff;color:#000000;font-family:'Courier New';font-size:14.4pt;">console.log(<span style="color:#008000; font-weight:bold; ">&quot;request:&#32;&quot;&#32;</span>+&#32;request);<br />console.log(<span style="color:#008000; font-weight:bold; ">&quot;</span><span style="color:#000080; font-weight:bold; ">\n</span><span style="color:#008000; font-weight:bold; ">REQUEST&#32;OBJECT&#32;KEYS&#32;(own&#32;property):&quot;</span>);<br />for(k in request) if(request.hasOwnProperty(k)) console.log(&quot;key: &quot; + k);<br>
+</pre>
+
+<p>This time when we run the server we should see output on the server console like the following.</p>
+<p><img src="images/problem3-1.png"  alt="p3-1" /></p>
+<p>All objects in javascript are collections of key:value pairs. Here we are seeing all the keys of the request object. Keys are just javascript strings. Notice among this output we appear to be intercepting the URL of the resource the client is requesting and the HTTP method. Lets look at their values to see if they match what we saw in the browser.</p>
+<p>Modify the code to only show those fields, So now our code would look like:</p>
+<pre style="background-color:#ffffff;color:#000000;font-family:'Courier New';font-size:14.4pt;">console.log(<span style="color:#008000; font-weight:bold; ">&quot;url:&#32;&quot;&#32;</span>+&#32;request.url);<br />console.log(<span style="color:#008000; font-weight:bold; ">&quot;method:&#32;&quot;&#32;</span>+&#32;request.method);<br />
+</pre>
+<p>and the corresponding output would look like:</p>
+<p><img src="images/problem3-2.png" width="407" height="57" alt="p3-2" /></p>
+<p>Now try visiting <span class="code">http://localhost:3000/index.html</span></p>
+<p>The output should  now show:</p>
+<p><img src="images/problem3-3.png" width="374" height="58" alt="p3-3" /></p>
+<p>Finally try visiting <span class="code">http://localhost:3000/index.html?name=Louis</span> and the output should be</p>
+<p><img src="images/problem3-4.png" width="446" height="54" alt="p3-4" /></p>
+<p>So we are able to intercept with our javascript the resource the client wants including the query string portion (the part after the &quot;?&quot;). </p>
+<p>It's also very useful to see the keys and values of the request object's <span class="code">headers</span>.</p>
+<p>Try adding the following code and see what you get. What do you suppose this information from the client message might represent?</p>
+<pre>
+console.log("request headers:");
+console.log(request.headers);
+</pre>
+<p><img src="images/problem3-4B.png" width="1153" height="154"></p>
+<p>&nbsp;</p>
+<p>In the next problem we would like to respond to the client based on the name that they would like to be addressed by.</p>
+<p class="segment-header"><span class="black-bold">Problem 4)</span></p>
+<p>Finally, if the client visits <span class="code">http://localhost:3000/index.html?name=Louis</span> we want the server to respond with &quot;Hello Louis&quot; instead of &quot;Hello World&quot;. Obviously we want it to work with any name -including yours.</p>
+<p>So we want to extract the portion of the URL string after <span class="code">?name=</span> and use that to replace &quot;World&quot;. To keep things simple lets just make it to work if the URL string ends with <span class="code">?name=aName</span>. We will just do some javascript substring operations to extract the name. For example</p>
+<p>replace the line of code in the server:</p>
+<pre style="background-color:#ffffff;color:#000000;font-family:'Courier New';font-size:14.4pt;">response.write(<span style="color:#008000; font-weight:bold; ">'World</span><span style="color:#000080; font-weight:bold; ">\n</span><span style="color:#008000; font-weight:bold; ">'</span>);</pre>
+<p>with something like the following instead:</p>
+<pre style="background-color:#ffffff;color:#000000;font-family:'Courier New';font-size:14.4pt;">&#32;<span style="color:#000080; font-weight:bold; ">var&#32;</span>urlString&#32;=&#32;request.url;<br />&#32;<span style="color:#000080; font-weight:bold; ">var&#32;</span>index&#32;=&#32;urlString.indexOf(<span style="color:#008000; font-weight:bold; ">&quot;?name=&quot;</span>);<br />&#32;<span style="color:#000080; font-weight:bold; ">if</span>(index&#32;&gt;&#32;<span style="color:#0000ff; ">0</span>)&#32;{<br />&#32;&#32;<span style="color:#000080; font-weight:bold; ">var&#32;</span>name&#32;=&#32;urlString.substring(index&#32;+&#32;<span style="color:#008000; font-weight:bold; ">&quot;?name=&quot;</span>.length,&#32;urlString.length);<br />&#32;&#32;response.write(name&#32;+&#32;<span style="color:#008000; font-weight:bold; ">&quot;</span><span style="color:#000080; font-weight:bold; ">\n</span><span style="color:#008000; font-weight:bold; ">&quot;</span>);<br />&#32;&#32;}<br /><span style="color:#000080; font-weight:bold; "> else&#32;</span>response.write(<span style="color:#008000; font-weight:bold; ">'World</span><span style="color:#000080; font-weight:bold; ">\n</span><span style="color:#008000; font-weight:bold; ">'</span>);</pre>
+<p>Now when we visit <span class="code">http://localhost:3000/index.html?name=Louis</span> we should see output like:</p>
+<p><img src="images/problem3-5.png" width="545" height="181" alt="p3-5" /></p>
+<p>&nbsp;</p>
+<p class="segment-header"><span class="black-bold">Optional)</span></p>
+<p>Our proposed solution to the previous problem would work for visiting <span class="code">http://localhost:3000/index.html?name=Louis</span> but would not work if the client visits URL's like:</p>
+<p><span class="code">http://localhost:3000/index.html?name=Louis&amp;email=ldnel.com</span></p>
+<p>Can you make it work more generally. That is, extract the <span class="code">?name=</span> portion from a more complex URL query string.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span class="red">When you have completed these problems demonstrate your code to a TA's to get credit for the tutorial.</span> </p>
+</body>
+</html>

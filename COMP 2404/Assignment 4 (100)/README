@@ -1,0 +1,54 @@
+Program Author: Christine Laurendeau
+Revision Author: Nemanja (Nem) Zutkovic (101085982)
+  
+Program Purpose:
+The purpose of the program is to act like an event management program for your school and work life. It is meant to store, add, and preview events in your life in an organized fashion. Each event includes the event name, date, time, event type and priority.
+
+Source Files:
+Main.cc
+Control.cc
+View.cc
+Calendar.cc
+Event.cc
+WorkEvent.cc
+SchoolEvent.cc
+Date.cc
+Time.cc
+
+Header Files:
+Control.h
+View.h
+Calendar.h
+List.h
+Event.h
+WorkEvent.h
+SchoolEvent.h
+Date.h
+Time.h
+Array.h
+EventServer.h
+
+Data Files:
+in.txt
+
+Compilation Command (in directory of source/header/data files):
+make
+
+Launching Commands (in directory of generated executable):
+./cal
+./cal < in.txt (To preview events from txt file)
+
+Operating Commands:
+Press 1 to add an event:
+ - Enter the event name
+ - Enter the day the event is taking place
+ - Enter the month the event is taking place
+ - Enter the year the event is taking place
+ - Enter the hour of day the event is taking place
+ - Enter the minute of hour the event is taking place
+ - Enter the second of minute the event is taking place
+ - Enter the priority of the event (On a scale of 1 being the lowest priority and 10 being the highest priority)
+ - Enter the event type (Work Event or School Event)
+ **Any numbers entered below 0 will be set to 0.
+ Repeat process until desired amount of events are in your calendar.
+ Press 0 to exit the program and to display your calendars.

@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#
+# the pound sign is used for comments in a BASH script.
+# athe first line in the script is a special comment that 
+# tells the shell which shell should be executed when running 
+# this script.  '#!' is called shebang. In this script, we want
+# to use the BASH shell. 
+#
+
+
+#
+# print some text to the stdout
+#
+
+echo ""
+echo "I hope you are enjoying your introduction to Linux"
+echo ""
+echo "This script just prints out some text to stdout"
+echo "and then uses the grep command to print out each"
+echo "line in this script that has the word 'echo' in it"
+echo ""
+echo "The grep command is a vey powerful tool that allows you"
+echo "search files for a  given word or pattern"
+echo ""
+echo "This script will run 'grep echo Irun'"
+echo
+
+
+#
+# run the grep command
+#
+
+grep echo IRun
+
+echo ""
+echo "Now we'll run the command again but only print out lines"
+echo "that start with the word 'echo'"
+echo ""
+
+
+#
+#  use the ^ to denote that you are looking for echo at the start of a line
+#
+
+grep ^echo IRun
