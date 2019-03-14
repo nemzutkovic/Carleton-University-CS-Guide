@@ -13,5 +13,5 @@ Introduction to system-level programming with fundamental OS concepts, procedure
 * [COMP24XX-F18 VM](https://carleton.ca/scs/technical-support/virtual-machines/) (Or whatever is latest VM for 2401)
 
 ## Compiling & Running
-* `gcc -o <program-name> <c-file>`
+* `gcc <c-file> -o <program-name> `
 * `./<program-name>`
