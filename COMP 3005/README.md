@@ -5,7 +5,7 @@ Introduces students to concepts of database management systems, database design 
 
 ## Details
 * Professor: [Menghci Liu](https://carleton.ca/scs/people/mengchi-liu/)
-* Term Taken: Winter 2018
+* Term Taken: Winter 2019
 * Query Language: SQL
 
 ## Other

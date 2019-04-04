@@ -5,8 +5,9 @@ An introduction to alternative programming paradigms such as functional, constra
 
 ## Details
 * Professor: [Robert Collier](https://carleton.ca/scs/people/robert-collier/)
-* Term Taken: Winter 2018
+* Term Taken: Winter 2019
 * Programming Language: Haskell / Prolog
 
 ## Other
 * Currently Taking Course
+* Assignment and tutorial outlines are on the [course website](https://homeostasis.scs.carleton.ca/wiki/index.php/Operating_Systems_(Winter_2019))

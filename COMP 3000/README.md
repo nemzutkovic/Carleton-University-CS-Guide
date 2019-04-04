@@ -5,7 +5,7 @@ Operating system implementation course stressing fundamental issues in design an
 
 ## Details
 * Professor: [Anil Somayaji](https://carleton.ca/scs/people/anil-somayaji/)
-* Term Taken: Winter 2018
+* Term Taken: Winter 2019
 * Programming Language: C
 
 ## Other
