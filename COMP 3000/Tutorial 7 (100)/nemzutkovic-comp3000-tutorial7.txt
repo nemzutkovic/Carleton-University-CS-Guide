@@ -1,0 +1,34 @@
+COMP 3000: Tutorial 7
+
+opensnoop:
+- Turning off x2goserver helped reduce opensnoop output.
+- There are so many failed opens because the files and/or directories that the process is attempting to open do not exist.
+- opensnoop is monitoring/tracing the kernel event do_sys_open(). Seen on line 181 in opensnoop.py.
+
+bashreadline:
+- Running and observing bashreadline.
+- Unsure of how to utilize ldd.
+
+ttysnoop:
+- Use the 'tty' command and it will show the tty associated with that window. Using 'ls /dev' will show all the peudo tty's that have been allocated on the system.
+- Output is being truncated because bpf_probe_read() can only use a fixed size, so it truncates to 'count' in user space. 
+- Unsure of how to reduce or eliminate the truncation.
+
+killsnoop:
+- Yes, they are all picked up by killsnoop.
+- Ctrl-C at the command line always generates a signal for me. When killsnoop gets Ctrl-C cannot pick it up. Yes, you could add an 'if event.sig == 2: return' in print_event().
+- There were no calls. Tried with 'nano &' and then 'nano fg'.
+- Yes. Running 'strace ls' generates three kill system calls: SIGKILL(9), SIGSTOP(19), SIGCONT(18).
+
+syscount (with x2goserver running):
+- 'syscount': stat, lseek, read are the top 3 syscalls when the system is idle.
+- 'syscount -P': x2gocleansessio, unknown, unknown are the top 3 programs generating the most system calls.
+- 'syscount -L': poll, select, epoll_wait are the top 3 system calls that have high latency.
+- 'syscount -e EPERM': No, only saw setsockopt with a count of 2.
+
+trace:
+- trace (opensnoop imitation): trace '::do_sys_open "%s", arg2'
+- trace (bashreadline imitation): trace 'r:bash:readline "%s", retval'
+- trace (bashreadline user stack): trace 'r:bash:readline "%s", retval' -U
+- trace (bashreadline kernel stack): trace 'r:bash:readline "%s", retval' -K
+- UNSURE -> trace (killsnoop): trace 't:syscalls:sys_enter_kill'

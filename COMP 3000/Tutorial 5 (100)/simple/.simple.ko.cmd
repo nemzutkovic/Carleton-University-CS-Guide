@@ -1,0 +1,1 @@
+cmd_/home/student/Tutorials/T5/simple/simple.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/student/Tutorials/T5/simple/simple.ko /home/student/Tutorials/T5/simple/simple.o /home/student/Tutorials/T5/simple/simple.mod.o ;  true

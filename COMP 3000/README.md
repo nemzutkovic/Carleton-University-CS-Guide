@@ -8,5 +8,13 @@ Operating system implementation course stressing fundamental issues in design an
 * Term Taken: Winter 2019
 * Programming Language: C
 
+## Prerequisites
+* Carleton VPN (For [OpenStack](https://openstack.scs.carleton.ca/) VMs)
+* Windows: [Putty](https://www.putty.org/)
+
+## Compiling & Running
+* `gcc <c-file> -o <program-name>`
+* `./<program-name>`
+
 ## Other
-* Currently Taking Course
+* [Course Website](https://homeostasis.scs.carleton.ca/wiki/index.php/Operating_Systems_(Winter_2019))

@@ -1,0 +1,20 @@
+COMP 3000: Tutorial 8
+
+**Following helped catch behind the scenes signals: strace -e trace=signal ./3000pc <wordcount> <producer interval> <consumer interval>
+1. The producer signals the consumer when it's produced the last word in respect to its' interval. A call to wakeup_consumer() happens.
+   The consumer signals the producer when it's consumed (printed) the last word in respect to it's interval. A call to wakeup_producer() happens.
+2. See 3000pc.c code. The random words are outputted to file so that only signal messages are seen on the console. 
+   Must delete the text file before running 3000pc again, otherwise it will just append more words to the file.
+3. Assuming a 1:1 interval ratio...The consumer is unable to print out any words and finish.
+   Assuming the interval is in the favor of the producer...The consumer is unable to print out any words and finish.
+   Assuming the interval is in the favor of the consumer...The consumer is unable to print out any words and finish.
+4. Assuming a 1:1 interval ratio...Program still functions behaves normally.
+   Assuming the interval is in the favor of the producer...3000pc still is able to complete.
+   Assuming the interval is in the favor of the consumer...the producer is never able to print out the rest of the words.
+5. Assuming a 1:1 interval ratio...3000pc is able to finish.
+   Assuming the interval is in the favor of the producer...3000pc is able to finish.
+   Assuming the interval is in the favor of the consumer...the consumer receives SIGUSR1 every interval count.
+6. The producer stops running and "User defined signal 1" is seen on the command line.
+7. When the interval is in favor of the consumer, or 1:1, the consumer ends up getting killed by SIGUSR1. The producer then hangs up.
+8. See 3000pc.c code. The program is almost instantaneous, the producer can even finish before the consumer despite having the interval in favor of the consumer.
+Stopping right here

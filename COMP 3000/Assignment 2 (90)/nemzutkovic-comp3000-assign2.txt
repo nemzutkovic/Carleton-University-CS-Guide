@@ -1,0 +1,203 @@
+COMP 3000 Assignment 2
+Nemanja (Nem) Zutkovic
+101085982
+February 11, 2019
+
+Resources Used:
+- Q4: https://en.wikipedia.org/wiki/Sparse_file
+- Q5: http://www.linfo.org/superblock
+- Q7: man access
+- Q8: man 2 write
+      man mmap
+      https://rules.sonarsource.com/c/RSPEC-855
+      Chenyi Hou: Helped me identify that I should change PROT_READ to PROT_EXEC
+      
+
+1. You are still able to read file B. This is because B is hard linked to A, meaning they refer to the same inode.
+   Below, you can see both file A and B refer to the same inode.
+
+student@COMPXXXX:~/Assignments/A2$ vi A
+student@COMPXXXX:~/Assignments/A2$ ln A B
+student@COMPXXXX:~/Assignments/A2$ ls -li
+total 8
+288 -rw-rw-r-- 2 student student 16 Feb  6 22:31 A
+288 -rw-rw-r-- 2 student student 16 Feb  6 22:31 B
+student@COMPXXXX:~/Assignments/A2$ more A
+This is file A.
+student@COMPXXXX:~/Assignments/A2$ rm A
+student@COMPXXXX:~/Assignments/A2$ more B
+This is file A.
+
+2. You are not able to read file B. This is because B is symbolically linked to A, meaning B was simply pointing to, or a link to, file A.
+   Below, you can see that file A and B refer to different inodes. Deleting the source file of the symbolic link (File A) has File B pointing to a non-existent file.
+
+student@COMPXXXX:~/Assignments/A2$ vi A
+student@COMPXXXX:~/Assignments/A2$ ln -s A B
+student@COMPXXXX:~/Assignments/A2$ ls -li
+total 4
+2201 -rw-rw-r-- 1 student student 16 Feb  6 22:38 A
+ 197 lrwxrwxrwx 1 student student  1 Feb  6 22:39 B -> A
+student@COMPXXXX:~/Assignments/A2$ more B
+This is file A.
+student@COMPXXXX:~/Assignments/A2$ rm A
+student@COMPXXXX:~/Assignments/A2$ more B
+more: stat of B failed: No such file or directory
+
+3. If fsck finds an allocated inode that no file refers to, it will prompt you to fix it (assuming you didn't specify the -y option). fsck will correct the inode count.
+   An example of how this problem could arise is through symbolic linking. If the source file is removed in the file system, and the symbolically linked file is still there, there will be a discrepancy in inode count.
+   Here is an example, where a filesystem foo contains file A and file B (which is symbolically linked to file A).
+   When then symbolically linked files B to A, and then removed A. Once we ran fsck it noticed the free inodes had the wrong count.
+
+student@COMPXXXX:/mnt$ ls -li
+total 13
+13 -rw-rw-r-- 1 student student    16 Feb  7 13:44 A
+12 lrwxrwxrwx 1 student student     1 Feb  7 13:44 B -> A
+11 drwx------ 2 root    root    12288 Feb  7 13:34 lost+found
+student@COMPXXXX:/mnt$ rm A
+student@COMPXXXX:/mnt$ ls -li
+total 12
+12 lrwxrwxrwx 1 student student     1 Feb  7 13:44 B -> A
+11 drwx------ 2 root    root    12288 Feb  7 13:34 lost+found
+student@COMPXXXX:/mnt$ fsck.ext4 -v -f ~/Assignments/A2/foo
+e2fsck 1.44.1 (24-Mar-2018)
+/home/student/Assignments/A2/foo: recovering journal
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Free inodes count wrong (65525, counted=65524).
+Fix<y>? yes
+
+/home/student/Assignments/A2/foo: ***** FILE SYSTEM WAS MODIFIED *****
+
+          12 inodes used (0.02%, out of 65536)
+           0 non-contiguous files (0.0%)
+           0 non-contiguous directories (0.0%)
+             # of inodes with ind/dind/tind blocks: 0/0/0
+             Extent depth histogram: 3
+       18535 blocks used (7.07%, out of 262144)
+           0 bad blocks
+           0 large files
+
+           0 regular files
+           2 directories
+           0 character device files
+           0 block device files
+           0 fifos
+           0 links
+           1 symbolic link (1 fast symbolic link)
+           0 sockets
+------------
+           3 files
+
+4. If such a backup program was used, the next time you mounted the backed up filesystem, the size of that filesystem would surprise you.
+   The old filesystem's logical file size would be the backed up filesystem's physical file size. This is because all of the zero/null bytes were copied over during the backup process. 
+   On the original filesystem, the zero/null bytes were being represented as metadata and did not take up any real physical disk space, whereas the backup program now treated the copied over zero/null bytes as real data. 
+   This is bad because your new filesystem physical file size will be A LOT larger than the original file system. 
+   In time, using this backup program over and again, would create larger and larger filesystems and eventually they might not be able to be mounted - not enough disk space.
+
+5. Yes, a filesystem's superblock is acessed frequently in normal operation because "a request to access any file requires access to the filesystem's superblock".
+   The reason for this frequent access is because the superblock acts as a holder for the filesystem's metadata and is an abstraction of the filesystem.
+   The superblock contains metadata of the filesystem, pointers to inodes, is the root of a tree, and normally has more than one backup.   
+
+6. It is normally not safe to say yes to this question because you are risking your privacy, safety and security. This is because you have no idea who you are connecting to - it could be a malicious third party intercepting your connection.
+   A situation where you should say no, is if you do not recognize the host you are connecting to. 
+   Before saying yes, you would double check the server's host key fingerprint so you can compare it to the current fingerprint. 
+   If you still do not recognize it after that, you should definitely not connect to that host, because if you say yes, an attacker could have just connected to your system.
+   Another situation where you should definitely say no to, is if you already verified a host in the past, but are being asked to verify again. .ssh/known_hosts was supposed to already have the host key so it should seem suspicious that you are being asked again.
+
+7. Here is the modified 3000test.c so it can report what access the current user to a file:
+
+student@COMPXXXX:~/Assignments/A2$ diff -c 3000test.c 3000testmod.c
+*** 3000test.c  2019-02-10 12:15:05.208000000 -0500
+--- 3000testmod.c       2019-02-11 00:33:02.928000000 -0500
+***************
+*** 50,55 ****
+--- 50,74 ----
+        printf("File %s: \n", fn);
+        printf("   inode %ld\n", statbuf.st_ino);
+        printf("  length %ld\n", len);
++
++       if (access(fn, F_OK) != 0)
++               printf("'%s' does not exist!\n", fn);
++       else{
++               if (access(fn, R_OK) == 0)
++                       printf("Current user has read access to '%s\n", fn);
++               else
++                       printf("Current user does not have read access to '%s'\n", fn);
++
++               if (access(fn, W_OK) == 0)
++                       printf("Current user has write access to '%s'\n", fn);
++               else
++                       printf("Current user does not have write access to '%s'\n", fn);
++
++               if (access(fn, X_OK) == 0)
++                       printf("Current user has executable access to '%s'\n", fn);
++               else
++                       printf("Current user does not have executable access to '%s'\n", fn);
++       }
+
+          if (S_ISREG(statbuf.st_mode)) {
+                fd = open(fn, O_RDONLY);
+
+
+8. The only changes that needed to be made was the addition of the function declaration above main, changing PROT_READ to PROT_EXEC, casting the array pointer to a function pointer, and calling that function pointer with the appropiate parameters:
+
+student@COMPXXXX:~/Assignments/A2$ diff -c 3000test.c 3000run-write.c
+*** 3000test.c  2019-02-10 12:15:05.208000000 -0500
+--- 3000run-write.c     2019-02-10 12:15:38.056000000 -0500
+***************
+*** 21,26 ****
+--- 21,27 ----
+          exit(-1);
+  }
+
++ ssize_t write(int fd, const void *buf, size_t count);
+  int main(int argc, char *argv[])
+  {
+        struct stat statbuf;
+***************
+*** 58,64 ****
+                        report_error(strerror(errno));
+                }
+
+!               data = (char *) mmap(NULL, len, PROT_READ, MAP_SHARED, fd, 0);
+
+                if (data == MAP_FAILED) {
+                        report_error(strerror(errno));
+--- 59,65 ----
+                        report_error(strerror(errno));
+                }
+
+!               data = (char *) mmap(NULL, len, PROT_EXEC, MAP_SHARED, fd, 0);
+
+                if (data == MAP_FAILED) {
+                        report_error(strerror(errno));
+***************
+*** 77,82 ****
+--- 78,85 ----
+                        report_error(strerror(errno));
+                }
+
++               void (*data)(int, const void*, size_t) = (void (*) (int, const void*, size_t)) &write;
++                 (*data)(1, "Hello There!\n", 13);
+                close(fd);
+          }
+
+
+9. After running all of the commands, there is a total of three test.txt files and they are in the following locations (with proof):
+   There is a test.txt file in the location where it was first created, via student@COMPXXXX.
+
+student@COMPXXXX:~/Assignments/A2$ ls
+A  B  foo  scs-files  test.txt
+
+   There is a test.txt file locally inside the scs-files/testdir folder, via student@COMPXXXX.
+
+student@COMPXXXX:~/Assignments/A2$ ls scs-files/testdir/
+test.txt
+
+   There is also a test.txt file inside testdir via nemzutkovic@access.scs.carleton.ca.
+
+[nemzutkovic@access1 ~]$ ls testdir
+test.txt
