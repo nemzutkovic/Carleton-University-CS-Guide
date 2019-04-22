@@ -1,0 +1,632 @@
+/*******************************************************************
+Sample Program:  Dynamic SQL Method 4
+
+1. proc dsqlm4.pc
+2. cc -c dsqlm4.c -I/usr/include/oracle/11.2/client64
+3. cc -o dsqlm4 dsqlm4.o -L/usr/lib/oracle/11.2/client64/lib -lclntsh
+4. ./dsqlm4
+
+This program connects you to ORACLE using your username and
+password, then prompts you for a SQL statement.  You can enter
+any legal SQL statement.  Use regular SQL syntax, not embedded SQL.
+Your statement will be processed.  If it is a query, the rows
+fetched are displayed.
+You can enter multi-line statements.  The limit is 1023 characters.
+This sample program only processes up to MAX_ITEMS bind variables and
+MAX_ITEMS select-list items.  MAX_ITEMS is #defined to be 40.
+*******************************************************************/
+
+#include <stdio.h>
+#include <string.h>
+#include <setjmp.h>
+#include <sqlda.h>
+#include <stdlib.h>
+#include <sqlcpr.h>
+#include <sqlca.h>
+/* Maximum number of select-list items or bind variables. */
+#define MAX_ITEMS         40
+
+/* Maximum lengths of the _names_ of the
+   select-list items or indicator variables. */
+#define MAX_VNAME_LEN     30
+#define MAX_INAME_LEN     30
+
+#ifndef NULL
+#define NULL  0
+#endif
+
+/* Prototypes */
+void sql_error(void);
+int oracle_connect(void);
+int alloc_descriptors(int, int, int);
+int get_dqlstmt(void);
+void set_bind_variables(void);
+void process_select_list(void);
+void help(void);
+
+char *dml_commands[] = {"SELECT", "select", "INSERT", "insert",
+                        "UPDATE", "update", "DELETE", "delete"};
+
+exec sql include sqlda;
+exec sql include sqlca;
+
+exec sql begin declare section;
+    char    dqlstmt[1024];
+    exec sql var dqlstmt is string(1024);
+exec sql end declare section;
+ 
+SQLDA *bindList;
+SQLDA *selectList;
+
+/* Define a buffer to hold longjmp state info. */
+jmp_buf jmp_continue;
+
+/* A global flag for the error routine. */
+int parse_flag = 0;
+
+int main() {
+    int i;
+
+    /* Connect to the database. */
+    if (oracle_connect() != 0)
+        exit(1);
+
+    /* Allocate memory for the select and bind descriptors. */
+    if (alloc_descriptors(MAX_ITEMS, MAX_VNAME_LEN, MAX_INAME_LEN) != 0)
+        exit(1);
+
+    /* Process SQL statements. */
+    for (;;) 
+    {
+        (void) setjmp(jmp_continue);
+
+        /* Get the statement.  Break on "exit". */
+        if (get_dqlstmt() != 0)
+            break;
+
+        /* Prepare the statement and declare a cursor. */
+        exec sql whenever sqlerror do sql_error();
+
+        parse_flag = 1;     /* Set a flag for sql_error(). */
+        exec sql prepare s from :dqlstmt;
+        parse_flag = 0;     /* Unset the flag. */
+
+        exec sql declare c cursor for s;
+
+        /* Set the bind variables for any placeholders in the
+           SQL statement. */
+        set_bind_variables();
+
+        /* Open the cursor and execute the statement.
+         * If the statement is not a query (SELECT), the
+         * statement processing is completed after the
+         * OPEN.
+         */
+
+        exec sql open c using descriptor bindList;
+
+        /* Call the function that processes the select-list.
+         * If the statement is not a query, this function
+         * just returns, doing nothing.
+         */
+        process_select_list();
+
+        /* Tell user how many rows processed. */
+        for (i = 0; i < 8; i++)
+        {
+           if (strncmp(dqlstmt, dml_commands[i], 6) == 0)
+           {
+               printf("\n\n%d row%c processed.\n", sqlca.sqlerrd[2],
+                       sqlca.sqlerrd[2] == 1 ? '\0' : 's');
+               break;
+           }
+        }
+    }       /* end of for(;;) statement-processing loop */
+
+    /* When done, free the memory allocated for
+       pointers in the bind and select descriptors. */
+    for (i = 0; i < MAX_ITEMS; i++)
+    {    
+        if (bindList->V[i] != (char *) 0)
+            free(bindList->V[i]);
+        free(bindList->I[i]);   /* MAX_ITEMS were allocated. */
+        if (selectList->V[i] != (char *) 0)
+            free(selectList->V[i]);
+        free(selectList->I[i]); /* MAX_ITEMS were allocated. */
+    }
+
+    /* Free space used by the descriptors themselves. */
+    sqlclu(bindList);
+    sqlclu(selectList);
+
+    exec sql whenever sqlerror continue;
+    /* Close the cursor. */
+    exec sql close c;
+
+    exec sql commit work release;
+    puts("\nHave a good day!\n");
+
+    exec sql whenever sqlerror do sql_error();
+    return;
+}
+
+
+int oracle_connect()
+{
+    exec sql begin declare section;
+        varchar  username[128];
+        varchar  password[32];
+    exec sql end declare section;
+
+    printf("\nusername: ");
+    fgets((char *) username.arr, sizeof username.arr, stdin);
+    username.arr[strlen((char *) username.arr)-1] = '\0';
+    username.len = (unsigned short)strlen((char *) username.arr);
+
+    printf("password: ");
+    fgets((char *) password.arr, sizeof password.arr, stdin);
+    password.arr[strlen((char *) password.arr) - 1] = '\0';
+    password.len = (unsigned short)strlen((char *) password.arr);
+
+    exec sql whenever sqlerror goto connect_error;
+
+    exec sql connect :username identified by :password;
+
+    printf("\nConnected to ORACLE as user %s.\n", username.arr);
+
+    return 0;
+
+connect_error:
+    fprintf(stderr, "Cannot connect to ORACLE as user %s\n", username.arr);
+    return -1;
+}
+
+
+/*
+ *  Allocate the BIND and SELECT descriptors using sqlald().
+ *  Also allocate the pointers to indicator variables
+ *  in each descriptor.  The pointers to the actual bind
+ *  variables and the select-list items are realloc'ed in
+ *  the set_bind_variables() or process_select_list()
+ *  routines.  This routine allocates 1 byte for selectList->V[i]
+ *  and bindList->V[i], so the realloc will work correctly.
+ */
+
+alloc_descriptors(size, max_vname_len, max_iname_len)
+int size;
+int max_vname_len;
+int max_iname_len;
+{
+    int i;
+
+    /*
+     * The first sqlald parameter determines the maximum number of
+     * array elements in each variable in the descriptor. In
+     * other words, it determines the maximum number of bind
+     * variables or select-list items in the SQL statement.
+     *
+     * The second parameter determines the maximum length of
+     * strings used to hold the names of select-list items
+     * or placeholders.  The maximum length of column 
+     * names in ORACLE is 30, but you can allocate more or less
+     * as needed.
+     *
+     * The third parameter determines the maximum length of
+     * strings used to hold the names of any indicator
+     * variables.  To follow ORACLE standards, the maximum
+     * length of these should be 30.  But, you can allocate
+     * more or less as needed.
+     */
+
+    if ((bindList =
+            sqlald(size, max_vname_len, max_iname_len)) == (SQLDA *) 0)
+    {
+        fprintf(stderr,
+            "Cannot allocate memory for bind descriptor.");
+        return -1;  /* Have to exit in this case. */
+    }
+
+    if ((selectList =
+        sqlald (size, max_vname_len, max_iname_len)) == (SQLDA *) 0)
+    {
+        fprintf(stderr,
+            "Cannot allocate memory for select descriptor.");
+        return -1;
+    }
+    selectList->N = MAX_ITEMS;
+
+    /* Allocate the pointers to the indicator variables, and the
+       actual data. */
+    for (i = 0; i < MAX_ITEMS; i++) {
+        bindList->I[i] = (short *) malloc(sizeof (short));
+        selectList->I[i] = (short *) malloc(sizeof(short));
+        bindList->V[i] = (char *) malloc(1);
+        selectList->V[i] = (char *) malloc(1);
+    }
+       
+    return 0;
+}
+
+
+int get_dqlstmt()
+{
+    char *cp, linebuf[256];
+    int iter, plsql;
+    char sqlstmt[256];
+    //sqlstmt[0] = '\0';  
+
+    printf("\nALG> ");
+    dqlstmt[0] = '\0';        
+    fgets(linebuf, sizeof linebuf, stdin);
+    
+	if ((strncmp(linebuf, "EXIT", 4) == 0) ||
+           (strncmp(linebuf, "exit", 4) == 0))
+     {
+            return -1;
+     }
+
+	int i = 0;
+	sqlstmt[i++] = 's';
+	sqlstmt[i++] = 'e';
+	sqlstmt[i++] = 'l';
+	sqlstmt[i++] = 'e';
+	sqlstmt[i++] = 'c';
+	sqlstmt[i++] = 't';
+	sqlstmt[i++] = ' ';
+
+	if ((strncmp(linebuf, "PROJECT", 7) == 0) ||
+            (strncmp(linebuf, "project", 7) == 0))
+     {
+		int j = 7;
+            while(linebuf[j] != '('){
+			sqlstmt[i++] = linebuf[j++];
+		}
+		j++;
+		sqlstmt[i++] = ' ';
+           sqlstmt[i++] = 'f';
+		sqlstmt[i++] = 'r';
+		sqlstmt[i++] = 'o';
+		sqlstmt[i++] = 'm';
+		sqlstmt[i++] = ' ';
+		while(linebuf[j] != ')'){
+			sqlstmt[i++] = linebuf[j++];
+		}
+		sqlstmt[i++] = '\0';
+		//printf("sql project stmt %s\n", sqlstmt);
+     }
+	if ((strncmp(linebuf, "SELECT", 6) == 0) ||
+            (strncmp(linebuf, "select", 6) == 0))
+     { 
+           sqlstmt[i++] = ' ';
+		sqlstmt[i++] = '*';
+		sqlstmt[i++] = ' ';
+		sqlstmt[i++] = 'f';
+		sqlstmt[i++] = 'r';
+		sqlstmt[i++] = 'o';
+		sqlstmt[i++] = 'm';
+		sqlstmt[i++] = ' ';
+		
+		int j = 6;
+		while(linebuf[j] != '('){
+			j++;
+		}
+		j++;
+		while(linebuf[j] != ')'){
+			sqlstmt[i++] = linebuf[j++];
+		}
+		j++;
+		sqlstmt[i++]= ' ';
+		sqlstmt[i++] = 'w';
+		sqlstmt[i++] = 'h';
+		sqlstmt[i++] = 'e';
+		sqlstmt[i++] = 'r';
+		sqlstmt[i++] = 'e';
+		sqlstmt[i++] = ' ';
+		j = 6;
+		while(linebuf[j] != '('){
+			sqlstmt[i++] = linebuf[j++];
+		}
+		sqlstmt[i++] = '\0';
+	//	printf("sql select stmt %s\n", sqlstmt);
+     }
+	strcat(dqlstmt, sqlstmt);
+	printf("dqlstmt %s\n", dqlstmt);    
+return 0;
+}
+
+void set_bind_variables()
+{
+    int i, n;
+    char bind_var[64];
+
+    /* Describe any bind variables (input host variables) */
+    exec sql whenever sqlerror do sql_error();
+
+    bindList->N = MAX_ITEMS;  /* Initialize count of array elements. */
+    exec sql describe bind variables for s into bindList;
+
+    /* If F is negative, there were more bind variables
+       than originally allocated by sqlald(). */
+    if (bindList->F < 0)
+    {
+        printf ("\nToo many bind variables (%d), maximum is %d\n.",
+                    -bindList->F, MAX_ITEMS);
+        return;
+    }
+
+    /* Set the maximum number of array elements in the
+       descriptor to the number found. */
+    bindList->N = bindList->F;
+ 
+    /* Get the value of each bind variable as a
+     * character string.
+     *   
+     * C[i] contains the length of the bind variable
+     *      name used in the SQL statement.
+     * S[i] contains the actual name of the bind variable
+     *      used in the SQL statement.
+     *
+     * L[i] will contain the length of the data value
+     *      entered.
+     *
+     * V[i] will contain the address of the data value
+     *      entered.
+     *
+     * T[i] is always set to 1 because in this sample program
+     *      data values for all bind variables are entered
+     *      as character strings.
+     *      ORACLE converts to the table value from CHAR.
+     *
+     * I[i] will point to the indicator value, which is
+     *      set to -1 when the bind variable value is "null".
+     */
+    for (i = 0; i < bindList->F; i++)    {
+        printf ("\nEnter value for bind variable %.*s:  ",
+               (int)bindList->C[i], bindList->S[i]);
+        fgets(bind_var, sizeof bind_var, stdin);
+
+        /* Get length and remove the new line character. */
+        n = strlen(bind_var) - 1;
+
+        /* Set it in the descriptor. */
+        bindList->L[i] = n;
+
+        /* (re-)allocate the buffer for the value.
+           sqlald() reserves a pointer location for
+           V[i] but does not allocate the full space for
+           the pointer. */
+
+         bindList->V[i] = (char *) realloc(bindList->V[i],
+                         (bindList->L[i] + 1));            
+
+        /* And copy it in. */
+        strncpy(bindList->V[i], bind_var, n);
+
+        /* Set the indicator variable's value. */
+        if ((strncmp(bindList->V[i], "NULL", 4) == 0) ||
+                (strncmp(bindList->V[i], "null", 4) == 0))
+            *bindList->I[i] = -1;
+        else
+            *bindList->I[i] = 0;
+    
+        /* Set the bind datatype to 1 for CHAR. */
+        bindList->T[i] = 1;
+    }
+  return;
+}
+
+void process_select_list() {
+    int i, null_ok, precision, scale;
+
+    if ((strncmp(dqlstmt, "SELECT", 6) != 0) &&
+        (strncmp(dqlstmt, "select", 6) != 0))
+    {
+        selectList->F = 0;
+        return;
+    }
+
+    /* If the SQL statement is a SELECT, describe the
+        select-list items.  The DESCRIBE function returns
+        their names, datatypes, lengths (including precision
+        and scale), and NULL/NOT NULL statuses. */
+
+    selectList->N = MAX_ITEMS;
+    
+    exec sql describe select list for s into selectList;
+
+    /* If F is negative, there were more select-list
+       items than originally allocated by sqlald(). */
+    if (selectList->F < 0)
+    {
+        printf ("\nToo many select-list items (%d), maximum is %d\n",
+                -(selectList->F), MAX_ITEMS);
+        return;
+    }
+
+    /* Set the maximum number of array elements in the
+       descriptor to the number found. */
+    selectList->N = selectList->F;
+
+    /* Allocate storage for each select-list item.
+  
+       sqlprc() is used to extract precision and scale
+       from the length (selectList->L[i]).
+
+       sqlnul() is used to reset the high-order bit of
+       the datatype and to check whether the column
+       is NOT NULL.
+
+       CHAR    datatypes have length, but zero precision and
+               scale.  The length is defined at CREATE time.
+
+       NUMBER  datatypes have precision and scale only if
+               defined at CREATE time.  If the column
+               definition was just NUMBER, the precision
+               and scale are zero, and you must allocate
+               the required maximum length.
+
+       DATE    datatypes return a length of 7 if the default
+               format is used.  This should be increased to
+               9 to store the actual date character string.
+               If you use the TO_CHAR function, the maximum
+               length could be 75, but will probably be less
+               (you can see the effects of this in SQL*Plus).
+
+       ROWID   datatype always returns a fixed length of 18 if
+               coerced to CHAR.
+
+       LONG and
+       LONG RAW datatypes return a length of 0 (zero),
+               so you need to set a maximum.  In this example,
+               it is 240 characters.
+
+       */
+    
+    printf ("\n");
+    for (i = 0; i < selectList->F; i++)
+    {
+        char title[MAX_VNAME_LEN]; 
+        /* Turn off high-order bit of datatype (in this example,
+           it does not matter if the column is NOT NULL). */
+        sqlnul ((unsigned short *)&(selectList->T[i]), (unsigned short *)&(selectList->T[i]), &null_ok);
+
+        switch (selectList->T[i])
+        {
+            case  1 : /* CHAR datatype: no change in length
+                         needed, except possibly for TO_CHAR
+                         conversions (not handled here). */
+                break;
+            case  2 : /* NUMBER datatype: use sqlprc() to
+                         extract precision and scale. */
+                sqlprc ((unsigned long *)&(selectList->L[i]), &precision, &scale);
+                      /* Allow for maximum size of NUMBER. */
+                if (precision == 0) precision = 40;
+                      /* Also allow for decimal point and
+                         possible sign. */
+                /* convert NUMBER datatype to FLOAT if scale > 0,
+                   INT otherwise. */
+                if (scale > 0)
+                    selectList->L[i] = sizeof(float);
+                else
+                    selectList->L[i] = sizeof(int);
+                break;
+
+            case  8 : /* LONG datatype */
+                selectList->L[i] = 240;
+                break;
+
+            case 11 : /* ROWID datatype */
+            case 104 : /* Universal ROWID datatype */
+                selectList->L[i] = 18;
+                break;
+
+            case 12 : /* DATE datatype */
+                selectList->L[i] = 9;
+                break;
+ 
+            case 23 : /* RAW datatype */
+                break;
+
+            case 24 : /* LONG RAW datatype */
+                selectList->L[i] = 240;
+                break;
+        }
+        /* Allocate space for the select-list data values.
+           sqlald() reserves a pointer location for
+           V[i] but does not allocate the full space for
+           the pointer.  */
+
+         if (selectList->T[i] != 2)
+           selectList->V[i] = (char *) realloc(selectList->V[i],
+                                    selectList->L[i] + 1);  
+         else
+           selectList->V[i] = (char *) realloc(selectList->V[i],
+                                    selectList->L[i]);  
+
+        /* Print column headings, right-justifying number
+            column headings. */
+        
+        /* Copy to temporary buffer in case name is null-terminated */
+        memset(title, ' ', MAX_VNAME_LEN);
+        strncpy(title, selectList->S[i], selectList->C[i]);
+        if (selectList->T[i] == 2)
+           if (scale > 0)
+             printf ("%.*s ", selectList->L[i]+3, title);
+           else
+             printf ("%.*s ", selectList->L[i], title);
+        else
+          printf("%-.*s ", selectList->L[i], title);
+
+        /* Coerce ALL datatypes except for LONG RAW and NUMBER to
+           character. */
+        if (selectList->T[i] != 24 && selectList->T[i] != 2)
+            selectList->T[i] = 1;
+
+        /* Coerce the datatypes of NUMBERs to float or int depending on
+           the scale. */
+        if (selectList->T[i] == 2)
+          if (scale > 0)
+             selectList->T[i] = 4;  /* float */
+          else
+             selectList->T[i] = 3;  /* int */
+    }
+    printf ("\n\n");
+
+    /* FETCH each row selected and print the column values. */
+    exec sql whenever not found goto end_select_loop;
+
+    for (;;)
+    {
+        exec sql fetch c using descriptor selectList;
+
+        /* Since each variable returned has been coerced to a
+           character string, int, or float very little processing 
+           is required here.  This routine just prints out the 
+           values on the terminal. */
+        for (i = 0; i < selectList->F; i++)
+        {
+            if (*selectList->I[i] < 0)
+                if (selectList->T[i] == 4) 
+                  printf ("%-*c ",(int)selectList->L[i]+3, ' ');
+                else
+                  printf ("%-*c ",(int)selectList->L[i], ' ');
+            else
+                if (selectList->T[i] == 3)     /* int datatype */
+                  printf ("%*d ", (int)selectList->L[i], 
+                                 *(int *)selectList->V[i]);
+                else if (selectList->T[i] == 4)     /* float datatype */
+                  printf ("%*.2f ", (int)selectList->L[i], 
+                                 *(float *)selectList->V[i]);
+                else                          /* character string */
+                  printf ("%-*.*s ", (int)selectList->L[i],
+                            (int)selectList->L[i], selectList->V[i]);
+        }
+        printf ("\n");
+    }
+end_select_loop:
+    return;
+}
+
+void help()
+{
+    puts("\n\nEnter a SQL statement at the SQL> prompt.");
+    puts("Statements can be continued over several lines, except");
+    puts("within string literals.");
+    puts("Terminate a SQL statement with a semicolon.");
+    puts("Typing \"exit\" (no semicolon needed) exits the program.");
+    puts("You typed \"?\" or \"help\" to get this message.\n\n");
+}
+
+void sql_error()
+{
+    /* ORACLE error handler */
+    printf ("\n\n%.70s\n",sqlca.sqlerrm.sqlerrmc);
+    if (parse_flag)
+        printf
+        ("Parse error at character offset %d in SQL statement.\n",
+           sqlca.sqlerrd[4]);
+
+    exec sql whenever sqlerror continue;
+    exec sql rollback work;
+    longjmp(jmp_continue, 1);
+}

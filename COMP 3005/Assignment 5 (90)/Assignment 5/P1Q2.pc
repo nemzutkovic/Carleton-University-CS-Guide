@@ -1,0 +1,93 @@
+#include <stdio.h>
+
+exec sql include sqlca;
+exec sql begin declare section;
+  char *MYID = "fedora/oracle";
+  char sqlstmt[1024];
+  char snum[3];
+  char name[21];
+  int age;
+  char bnum[3];
+  char color[11];
+  char date[10];
+  char choice;
+exec sql end declare section;
+
+int main(){
+  exec sql connect :MYID;
+  if (sqlca.sqlcode == 0)
+    printf("Connected to ORACLE\n");
+  else
+    printf("Connect Failed\n");
+
+  while(1){
+    printf("\nThere are 3 tables in this db:\n");
+    printf("(1) Sailer\n");
+    printf("(2) Boat\n");
+    printf("(3) Reservation\n");
+    printf("Please enter 1, 2, 3, or q to quit: ")
+    scanf(" %c", &choice);
+
+    if(choice == '1'){
+      printf("\nS#: "); 
+      scanf("%s", &snum);
+      printf("Name: "); 
+      scanf("%s", &name);
+      printf("Age: "); 
+      scanf("%d", &age);
+
+      strcpy(sqlstmt, "insert into Sailer values (:v1, :v2, :v3)");
+      exec sql prepare s from :sqlstmt;
+      exec sql execute s using :snum, :name, :age;
+
+      if (sqlca.sqlcode == 0)
+        printf("Insert completed.\n");
+      else
+        printf("Insert failed.\n");
+    }
+    else if(choice == '2'){
+      printf("\nB#: "); 
+      scanf("%s", &bnum);
+      printf("Name: "); 
+      scanf("%s", &name);
+      printf("Color: "); 
+      scanf("%s", &color);
+
+      strcpy(sqlstmt, "insert into Boat values (:v1, :v2, :v3)");
+      exec sql prepare s from :sqlstmt;
+      exec sql execute s using :bnum, :name, :color;
+
+      if (sqlca.sqlcode == 0)
+        printf("Insert completed.\n");
+      else
+        printf("Insert failed.\n");
+    }
+    else if(choice == '3'){
+      printf("\nS#: "); 
+      scanf("%s", &snum);
+      printf("B#: "); 
+      scanf("%s", &bnum);
+      printf("Date (DD-MMM-YY): "); 
+      scanf("%s", &date);
+
+      strcpy(sqlstmt, "insert into Reservation values (:v1, :v2, :v3)");
+      exec sql prepare s from :sqlstmt;
+      exec sql execute s using :snum, :bnum, :date;
+
+      if (sqlca.sqlcode == 0)
+        printf("Insert completed.\n");
+      else
+        printf("Insert failed.\n");
+    }
+    else if(choice == 'q'){
+      break;
+    }
+    else
+      printf("Invalid entry.\n")
+
+    exec sql execute immediate "commit";
+  }
+
+  printf("All insertions done!\n");
+  exit(0);
+}

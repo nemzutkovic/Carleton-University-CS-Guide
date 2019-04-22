@@ -1,0 +1,58 @@
+#include <stdio.h>
+int main(){
+  exec sql include sqlca;
+  exec sql begin declare section;
+  char sqlstmt1[1024]; 
+  char sqlstmt2[1024]; 
+  char snum[3];
+  char sname[20];
+  int age;
+  char bnum[3]; 
+  char bname[20];
+  char color[10]; 
+  char  date[50];
+  char *LOGIN= "chenliu/chenliu";
+  exec sql end declare section;
+
+  exec sql whenever sqlerror goto error;
+  exec sql whenever not found do break;
+
+  exec sql connect :LOGIN; 
+  printf("Connected to ORACLE\n"); 
+
+  strcpy(sqlstmt1, "select * from Sailer order by S#");
+  exec sql prepare s from :sqlstmt1;
+  exec sql declare s_cursor cursor for s;
+  strcpy(sqlstmt2, "select * from Boat where exists (select * from Reservation R where R.S#=:snum and R.B#=Boat.B#) order by Boat.B#");
+  exec sql prepare b from :sqlstmt2;
+  exec sql declare b_cursor cursor for b;
+
+  exec sql open s_cursor;
+  printf("+----------------------------------------------------+\n"); 
+  printf("| S# |  Name      |  Age                       |\n"); 
+  printf("+----------------------------------------------------+\n"); 
+
+  while(1) {
+    exec sql fetch s_cursor into :snum, :sname, :age;
+      printf("| %s |  %s |  %d  |\n", snum, sname, age);
+      exec sql open b_cursor using :snum;
+      printf("+----------------------------------------------------+\n");
+      printf("|  +-----------------------------------------------+ |\n");
+      printf("|  |  B#    | Name        | Color                   | |\n");
+      printf("|  +-----------------------------------------------+ |\n");
+      while(1){
+        exec sql fetch b_cursor into :bnum, :bname, :color;
+  	printf("|  |  %s    | %s   | %s              | |\n", bnum, bname, color);
+  	printf("|  +-----------------------------------------------+ |\n");
+      }
+      printf("+----------------------------------------------------+\n");
+      exec sql close b_cursor;
+  }
+  exec sql close s_cursor;
+  exit(0);
+
+  error:
+    printf("Error found in SQL. \n");
+    exec sql rollback release;
+    exit(1);
+}
