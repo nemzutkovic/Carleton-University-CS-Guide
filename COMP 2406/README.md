@@ -30,7 +30,7 @@ Introduction to Internet application development; emphasis on computer science f
   - `http://localhost:3000/recipes` in browser
 
 ## Other
-* [Course Website](www.scs.carleton.ca/~comp2406)
+* Course Website: www.scs.carleton.ca/~comp2406
   - userid: 2406A
   - password: fall2017
 * Follows similar userid/password sequence for other years taught.
