@@ -24,7 +24,7 @@ Introduction to Internet application development; emphasis on computer science f
   - `node app.js` in /Assignment 3 (100)
   - `localhost:3000/recipes` in browser
 * Assignment 4:
-  - `npm install`
+  - `npm install` in /Assignment 4 (93)
   - `node recipe_file_line_reader.js` in /Assignment 4 (93)/data
   - `node mainserver.js` in /Assignment 4(93)
   - `http://localhost:3000/recipes` in browser
