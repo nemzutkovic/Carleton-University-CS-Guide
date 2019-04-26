@@ -13,4 +13,4 @@ Introduction to object-oriented software development, with emphasis on design an
 * [COMP24XX-F18 VM](https://carleton.ca/scs/technical-support/virtual-machines/) (Or whatever is latest VM for 2404)
 
 ## Compiling & Running
-* `make`
+* `make` (Because larger programs were used)

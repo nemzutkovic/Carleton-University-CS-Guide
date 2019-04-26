@@ -9,7 +9,7 @@ A second course in programming for BCS students, emphasizing problem solving and
 * Programming Language: Java
 
 ## Prerequisites
-* [Java 11.02](https://www.oracle.com/technetwork/java/javase/downloads/index.html) (Or whatever the latest version is)
+* [Java](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
 ## Compiling & Running
 * `javac <java-file>`  

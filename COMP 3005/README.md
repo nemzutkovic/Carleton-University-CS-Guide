@@ -10,4 +10,4 @@ Introduces students to concepts of database management systems, database design 
 
 ## Prerequisites
 * Carleton VPN (For [OpenStack](https://openstack.scs.carleton.ca/) VMs)
-* [COMP3005A-F17](https://carleton.ca/scs/technical-support/virtual-machines/) (Or whatever is latest VM for 3005)
+* [COMP3005A-F17](https://carleton.ca/scs/technical-support/virtual-machines/) (Or whatever is latest VM for 3005 is)

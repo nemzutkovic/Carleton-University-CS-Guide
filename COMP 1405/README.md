@@ -9,7 +9,7 @@ A first course in programming for B.C.S. students emphasizing problem solving an
 * Programming Language: Python
 
 ## Prerequisites
-* [Python 3.7.2](https://www.python.org/downloads/) (Or whatever the latest version is)
+* [Python](https://www.python.org/downloads/)
 
 ## Compiling & Running
 * Windows: `python <py-file>`

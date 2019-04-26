@@ -10,7 +10,7 @@ Introduction to Internet application development; emphasis on computer science f
 * Other Languages/Technologies: NodeJS, ExpressJS, HTML, CSS, MongoDB
 
 ## Prerequisites
-* [NodeJS 10.15.3](https://nodejs.org/en/download/) (Or whatever the latest version is)
+* [NodeJS](https://nodejs.org/en/download/)
 
 ## Compiling & Running
 * Assignment 1:
