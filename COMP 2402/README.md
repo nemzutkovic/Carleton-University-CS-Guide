@@ -14,7 +14,3 @@ Introduction to the design and implementation of abstract data types and to comp
 ## Compiling & Running
 * `javac <java-file>`  
 * `java <class-file>`
-
-## Files Missing
-* Assignment 8 (Solutions): TwoFourTree Part 1
-* Assignment 10 (Solutions): TwoFourTree Part 2

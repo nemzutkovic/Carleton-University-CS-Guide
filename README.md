@@ -1,9 +1,9 @@
 # Carleton University CS Guide
 
-Contains all my work done during my computer science undergrad program (2017-2020) @ [Carleton University](https://carleton.ca/). Each directory is represented as the course code in the form of COMP XXXX. Each directory will have it's own README file that will outline the professor, term course was taken, programming language(s) used and any other information or instructions. Each course directory has subdirectories that contain assignments, tutorials and any other useful material. Each of these subdirectories denote the (grade) received for that assignment or tutorial - that way, you know if it's worth taking a look at or not.
+Contains all my work done during my computer science undergraduate degree (2017-2020) @ [Carleton University](https://carleton.ca/). Each directory is represented as the course code in the form of COMP XXXX. Each directory will have it's own README file that will outline the professor, term course was taken, programming language(s) used and any other information. Each course directory has subdirectories that contain assignments, tutorials and any other useful material. Each of these subdirectories denote the (grade) received for that assignment or tutorial - that way, you know if it's worth taking a look at or not.
 
 ## Purpose
-To help current and future students get inspiration for their assignments and tutorials. Copying is not advised.
+To help current and future students get inspiration for their assignments and tutorials. Copying is forbidden.
 
 ## Prerequisites
 Each course will outline its' own prerequisites.

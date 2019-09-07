@@ -14,9 +14,3 @@ A first course in programming for B.C.S. students emphasizing problem solving an
 ## Compiling & Running
 * Windows: `python <py-file>`
 * Mac: `python3 <py-file>`
-
-## Files Missing
-* Tutorial 4 (Q8)
-* Tutorial 5 (Q-Q5)
-* Midterm Practice Problems (Solutions)
-* Final Exam Practice Problems (Solutions)
