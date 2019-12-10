@@ -10,10 +10,7 @@ Theory and development software systems. Computer ethics. Possible topics includ
 
 ## Prerequisites
 * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
-* [COMP24XX-F18 VM](https://carleton.ca/scs/technical-support/virtual-machines/) (Or whatever is latest VM for 2404)
-
-## Compiling & Running
-To be determined.
+* [COMP3004-F19 VM](https://carleton.ca/scs/technical-support/virtual-machines/) (Or whatever is latest VM for 2404)
 
 ## Other
-Currently taking this course.
+The group project for this course is [here](https://github.com/nemzutkovic/IDE).
