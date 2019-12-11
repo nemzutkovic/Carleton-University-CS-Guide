@@ -1,1 +1,0 @@
-cmd_/home/student/Tutorials/T5/newgetpid/newgetpid.ko := ld -r -m elf_x86_64 -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/student/Tutorials/T5/newgetpid/newgetpid.ko /home/student/Tutorials/T5/newgetpid/newgetpid.o /home/student/Tutorials/T5/newgetpid/newgetpid.mod.o ;  true
