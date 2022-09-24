@@ -1,6 +1,4 @@
 COMP 3000 Assignment 1
-Nemanja (Nem) Zutkovic
-101085982
 January 29, 2019
 
 Collaborator: Will Mahler

@@ -5,8 +5,6 @@ import GHC.Word
 import System.IO.Unsafe
 
 {-
-Name: Nemanja (Nem) Zutkovic
-Student #: 101085982
 Execution CMD: showAsASCIIArt (convertToASCII " .-+*#" True (loadBitmap "sample_image_to_search.bmp")))
 - The first argument only accepts list of n characters.
 - The second argument only accepts True or False.

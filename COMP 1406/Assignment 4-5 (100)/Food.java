@@ -1,5 +1,3 @@
-// Nemanja Zutkovic
-// 101085982
 import java.util.Random; 
 import javax.swing.*;
 import java.awt.*;

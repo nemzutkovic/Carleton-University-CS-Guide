@@ -1,5 +1,3 @@
-Name: Nem Zutkovic
-Student #: 101085982
 Date: March 18, 2020
 
 OS Used: Windows 10

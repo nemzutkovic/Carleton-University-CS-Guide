@@ -1,6 +1,4 @@
 COMP 3000 Assignment 2
-Nemanja (Nem) Zutkovic
-101085982
 February 11, 2019
 
 Resources Used:
@@ -195,9 +193,4 @@ A  B  foo  scs-files  test.txt
    There is a test.txt file locally inside the scs-files/testdir folder, via student@COMPXXXX.
 
 student@COMPXXXX:~/Assignments/A2$ ls scs-files/testdir/
-test.txt
-
-   There is also a test.txt file inside testdir via nemzutkovic@access.scs.carleton.ca.
-
-[nemzutkovic@access1 ~]$ ls testdir
 test.txt

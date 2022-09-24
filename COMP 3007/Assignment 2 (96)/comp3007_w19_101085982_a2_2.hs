@@ -5,8 +5,6 @@ import GHC.Word
 import System.IO.Unsafe
 
 {-
-Name: Nemanja (Nem) Zutkovic
-Student #: 101085982
 Execution CMD: search (convertToASCII " .-+*#" True (loadBitmap "sample_image_to_search.bmp"))) (convertToASCII " .-+*#" True (loadBitmap "sample_image_to_find.bmp")))
 - The first argument is ASCII art that you will be searching through.
 - The second argument is ASCII art that you will be trying to find. 

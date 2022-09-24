@@ -1,6 +1,3 @@
-// Nemanja Zutkovic
-// 101085982
-
 var url = require('url');
 var sqlite3 = require('sqlite3').verbose(); //Verbose provides more detailed stack trace
 var db = new sqlite3.Database('data/recipes');

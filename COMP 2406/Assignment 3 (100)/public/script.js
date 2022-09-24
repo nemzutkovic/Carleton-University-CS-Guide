@@ -1,5 +1,3 @@
-// Nemanja Zutkovic (101085982)
-
 function getIngredients() {
 
     let foodName = document.getElementById('ingredient').value

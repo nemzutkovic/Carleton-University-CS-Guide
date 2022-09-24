@@ -1,6 +1,3 @@
-// Nemanja Zutkovic 101085982
-// Jeremy Kielbiski 100981162
-
 var http = require("http"); //need to http
 var fs = require("fs"); //need to read static files
 var url = require("url"); //to parse url strings

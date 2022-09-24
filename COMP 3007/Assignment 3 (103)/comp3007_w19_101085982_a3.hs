@@ -1,6 +1,3 @@
--- Name: Nemanja (Nem) Zutkovic
--- Student #: 101085982
-
 type Node = Int
 type Edge = (Node, Node)
 data Graph = Single Node | Union Graph Graph [Edge] deriving Show

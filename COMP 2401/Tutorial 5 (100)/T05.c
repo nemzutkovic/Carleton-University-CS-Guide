@@ -20,12 +20,12 @@ void growArray(StudentArray *);
 void addStudent(StudentArray *, StudentType *);
 
 int main(void) {
-  StudentType *matilda, *joe, *timmy, *nem;
+  StudentType *matilda, *joe, *timmy, *johndoe;
   
   matilda = (StudentType *) calloc(1, sizeof(StudentType));
   joe = (StudentType *) calloc(1, sizeof(StudentType));
   timmy = (StudentType *) calloc(1, sizeof(StudentType));
-  nem = (StudentType *) calloc(1, sizeof(StudentType));
+  johndoe = (StudentType *) calloc(1, sizeof(StudentType));
 
 
   initStudent("Matilda", "Mallister", 22, "123444555",
@@ -34,8 +34,8 @@ int main(void) {
               8.7, joe);
   initStudent("Timmy", "Tortoise", 99, "345667788",
               11.5, timmy); 
-  initStudent("Nem", "Student", 27, "101085982",                                                 
-              9.9, nem); 
+  initStudent("John Doe", "Student", 27, "000000000",
+              9.9, johndoe);
 
 
   StudentArray * comp2401 = (StudentArray *) calloc(1, sizeof(StudentArray));
@@ -47,7 +47,7 @@ int main(void) {
     addStudent(comp2401, matilda);
     addStudent(comp2401, joe);
     addStudent(comp2401, timmy);
-    addStudent(comp2401, nem);
+    addStudent(comp2401, johndoe);
 
   printArray(comp2401);
 
@@ -56,7 +56,7 @@ int main(void) {
   free(matilda);
   free(joe);
   free(timmy);
-  free(nem);
+  free(johndoe);
   return 0;
 }
 

@@ -1,5 +1,3 @@
-// Nemanja Zutkovic (101085982)
-
 var express = require('express');
 var requestModule = require('request');
 var path = require('path');

@@ -1,6 +1,3 @@
-// Nemanja Zutkovic 101085982
-// Jeremy Kielbiski 100981162
-
 var pingpong = {x: 20, 
 				y: 30, 
 				xDirection: 1, //+1 for leftwards, -1 for rightwards

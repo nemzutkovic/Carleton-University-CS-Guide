@@ -10,6 +10,3 @@ Each course will outline its' own prerequisites.
 
 ## Compiling & Running
 Each course will also outline its' own compiling and running procedures.
-
-## Other
-If there is anything you think I should add, remove, or change, feel free to email me at nemzutkovic@icloud.com. Also, my only request is that you share this with as many students as possible. Good luck!
